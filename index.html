@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kwiz — Portfolio</title>
+  <meta name="description" content="Kwiz — BSIT student at TUP Manila. UI/UX, web & app development, graphic design, and social media." />
+  <meta name="theme-color" content="#f6e9ff" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✿</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="glow" id="glow" aria-hidden="true"></div>
+  <div class="blob b1" aria-hidden="true"></div>
+  <div class="blob b2" aria-hidden="true"></div>
+  <div class="blob b3" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a href="#top" class="logo">kwiz<span>✿</span></a>
+    <nav>
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#work">work</a>
+      <a href="#journey">journey</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <button class="theme" id="theme" aria-label="Toggle night mode">☾</button>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <p class="eyebrow">portfolio · 2026</p>
+      <h1>hi, i'm <span class="grad">Kwiz</span><span class="wave">✿</span></h1>
+      <p class="rotator">I'm a <span id="typed" class="typed"></span><span class="caret">|</span></p>
+      <p class="lead">4th-year BSIT student at TUP Manila who loves making things that look good <em>and</em> work well, from thesis apps to pastel-perfect interfaces.</p>
+      <div class="cta">
+        <a href="#work" class="btn magnetic">see my work</a>
+        <a href="#contact" class="btn ghost magnetic">say hello</a>
+      </div>
+
+      <div class="stickers" aria-hidden="true">
+        <div class="sticker s1" data-drag>UI/UX 💜</div>
+        <div class="sticker s2" data-drag>Dean's Lister ⭐</div>
+        <div class="sticker s3" data-drag>Figma ✨</div>
+        <div class="sticker s4" data-drag>Canva 🎀</div>
+        <div class="sticker s5" data-drag>Web Dev 🌸</div>
+      </div>
+      <p class="hint">psst… the stickers are draggable ✦</p>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section reveal">
+      <h2><span>01</span> about me</h2>
+      <div class="about-grid">
+        <div class="card about-card">
+          <p>I'm a creative who codes. My background spans <strong>graphic design</strong>, <strong>journalism</strong>, and <strong>social media</strong>, so I care about how something looks, how it reads, and how people feel using it.</p>
+          <p>I build web and mobile apps, design interfaces in Figma, and I'm currently completing my undergraduate thesis. I'm also a consistent Dean's Lister at the Technological University of the Philippines – Manila.</p>
+        </div>
+        <div class="stats">
+          <div class="stat card"><b data-count="4">0</b><span>year BSIT student</span></div>
+          <div class="stat card"><b data-count="3">0</b><span>creative worlds: design · writing · code</span></div>
+          <div class="stat card"><b>∞</b><span>pastel palettes tried</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section reveal">
+      <h2><span>02</span> skills &amp; tools</h2>
+      <div class="skill-groups">
+        <div class="card">
+          <h3>build</h3>
+          <div class="chips">
+            <span>Web development</span><span>App development</span><span>HTML · CSS · JS</span><span>Android</span><span>GitHub</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>design</h3>
+          <div class="chips">
+            <span>UI/UX</span><span>Figma</span><span>Canva</span><span>Graphic design</span><span>Branding</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>communicate</h3>
+          <div class="chips">
+            <span>Journalism</span><span>Social media</span><span>Content writing</span><span>E-commerce</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>productivity</h3>
+          <div class="chips">
+            <span>Google Workspace</span><span>Microsoft 365</span><span>Documentation</span><span>Teamwork</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work" class="section reveal">
+      <h2><span>03</span> selected work</h2>
+      <div class="projects">
+        <article class="project tilt">
+          <div class="thumb t1"><span>💸</span></div>
+          <div class="body">
+            <small>Undergraduate thesis · Android</small>
+            <h3>MySalapi</h3>
+            <p>A personal mobile financial management app built as my thesis project, designed to make tracking money feel simple and approachable.</p>
+            <div class="tags"><span>Mobile</span><span>UI/UX</span><span>Thesis</span></div>
+            <a href="#" class="link" data-todo>view project →</a>
+          </div>
+        </article>
+
+        <article class="project tilt">
+          <div class="thumb t2"><span>🏡</span></div>
+          <div class="body">
+            <small>Web development course</small>
+            <h3>StayCrafty</h3>
+            <p>A website I built for my web development course, focused on clean layout, responsive design, and a welcoming look and feel.</p>
+            <div class="tags"><span>Web</span><span>Responsive</span><span>Frontend</span></div>
+            <a href="#" class="link" data-todo>view project →</a>
+          </div>
+        </article>
+
+        <article class="project tilt">
+          <div class="thumb t3"><span>🛒</span></div>
+          <div class="body">
+            <small>Group entrepreneurship project</small>
+            <h3>Kita-Kita</h3>
+            <p>A business plan and concept for a sari-sari store management app, helping small neighborhood stores run smarter.</p>
+            <div class="tags"><span>Business plan</span><span>App concept</span><span>Teamwork</span></div>
+            <a href="#" class="link" data-todo>view project →</a>
+          </div>
+        </article>
+
+        <article class="project tilt">
+          <div class="thumb t4"><span>🌈</span></div>
+          <div class="body">
+            <small>Social media · Branding</small>
+            <h3>kriznbows</h3>
+            <p>My thrift business brand: content, visuals, and community-building on social media from start to finish.</p>
+            <div class="tags"><span>Social media</span><span>Branding</span><span>Canva</span></div>
+            <a href="#" class="link" data-todo>view project →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section id="journey" class="section reveal">
+      <h2><span>04</span> my journey</h2>
+      <ol class="timeline">
+        <li class="card">
+          <time>Now</time>
+          <h3>4th-year BSIT · TUP Manila</h3>
+          <p>Completing my undergraduate thesis while keeping up my record as a consistent Dean's Lister.</p>
+        </li>
+        <li class="card">
+          <time>Previous role</time>
+          <h3>IT &amp; E-Commerce Coordinator · LJ Farm Supply &amp; General Merchandize</h3>
+          <p>Managed the business's e-commerce and social media presence, mixing tech, content, and customer-facing work.</p>
+        </li>
+        <li class="card">
+          <time>2023 – 2024</time>
+          <h3>COMPASS</h3>
+          <p>Student organization experience that grew my teamwork and creative skills.</p>
+        </li>
+        <li class="card">
+          <time>2022 – 2023</time>
+          <h3>TUPGEAR</h3>
+          <p>My first stint in campus org life, learning how to collaborate and create with other students.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section reveal">
+      <div class="contact card">
+        <h2 class="center">let's make something pretty <span class="wave">✿</span></h2>
+        <p class="center">Open to internships, collabs, and creative projects. My inbox is always open.</p>
+        <div class="cta center">
+          <a class="btn magnetic" href="mailto:kriztenlapuz0807@gmail.com>kriztenlapuz0807@gmail.com</a>
+        </div>
+        <div class="socials center">
+          <a href="#" data-todo>GitHub</a>
+          <a href="#" data-todo>LinkedIn</a>
+          <a href="#" data-todo>Instagram</a>
+          <a href="#" data-todo>Behance</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>made with 💜 by Kwiz · <span id="year"></span></p>
+    <button id="toTop" class="btn ghost small">back to top ↑</button>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
