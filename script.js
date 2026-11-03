@@ -25,7 +25,6 @@
   const words = [
     "UI/UX designer",
     "web & app developer",
-    "social media storyteller",
     "pastel enthusiast",
     "thesis survivor",
   ];
@@ -141,29 +140,90 @@
   }
 
   /* ---------- draggable stickers ---------- */
-  $$("[data-drag]").forEach((el) => {
-    let sx, sy, ox, oy, dragging = false;
-    el.addEventListener("pointerdown", (e) => {
-      dragging = true;
-      el.setPointerCapture(e.pointerId);
-      const parent = el.offsetParent.getBoundingClientRect();
-      const r = el.getBoundingClientRect();
-      // switch from right/bottom anchoring to fixed left/top so it can move freely
-      el.style.left = r.left - parent.left + "px";
-      el.style.top = r.top - parent.top + "px";
+  const zone = $(".stickers");
+  const stickers = $$("[data-drag]");
+  const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+  let topZ = 10;
+
+  // switch every sticker from right/bottom anchoring to left/top pixels so they can roam
+  function anchorStickers() {
+    const pos = stickers.map((el) => [el.offsetLeft, el.offsetTop]);
+    stickers.forEach((el, i) => {
+      el.style.left = pos[i][0] + "px";
+      el.style.top = pos[i][1] + "px";
       el.style.right = "auto";
       el.style.bottom = "auto";
-      sx = e.clientX; sy = e.clientY;
-      ox = parseFloat(el.style.left); oy = parseFloat(el.style.top);
     });
+  }
+  anchorStickers();
+
+  window.addEventListener("resize", () => {
+    stickers.forEach((el) => {
+      el.style.left = clamp(el.offsetLeft, 0, Math.max(0, zone.clientWidth - el.offsetWidth)) + "px";
+      el.style.top = clamp(el.offsetTop, 0, Math.max(0, zone.clientHeight - el.offsetHeight)) + "px";
+    });
+  });
+
+  stickers.forEach((el) => {
+    let sx, sy, bx, by, lx, ly, lt, vx = 0, vy = 0, raf = null, dragging = false, baseRot = 0;
+
+    const place = (x, y) => {
+      el.style.left = x + "px";
+      el.style.top = y + "px";
+    };
+
+    el.addEventListener("pointerdown", (e) => {
+      cancelAnimationFrame(raf);
+      dragging = true;
+      el.setPointerCapture(e.pointerId);
+      el.classList.add("dragging");
+      el.style.zIndex = ++topZ;
+      baseRot = parseFloat(getComputedStyle(el).rotate) || 0;
+      sx = e.clientX; sy = e.clientY;
+      bx = el.offsetLeft; by = el.offsetTop;
+      lx = e.clientX; ly = e.clientY; lt = performance.now();
+      vx = 0; vy = 0;
+    });
+
     el.addEventListener("pointermove", (e) => {
       if (!dragging) return;
-      el.style.left = ox + (e.clientX - sx) + "px";
-      el.style.top = oy + (e.clientY - sy) + "px";
+      const maxX = zone.clientWidth - el.offsetWidth;
+      const maxY = zone.clientHeight - el.offsetHeight;
+      place(clamp(bx + (e.clientX - sx), 0, maxX), clamp(by + (e.clientY - sy), 0, maxY));
+
+      const now = performance.now();
+      const dt = Math.max(now - lt, 1);
+      vx = vx * 0.6 + ((e.clientX - lx) / dt) * 16 * 0.4;
+      vy = vy * 0.6 + ((e.clientY - ly) / dt) * 16 * 0.4;
+      lx = e.clientX; ly = e.clientY; lt = now;
+      if (!reduce) el.style.rotate = baseRot + clamp(vx * 1.2, -18, 18) + "deg";
     });
-    const end = () => { dragging = false; };
-    el.addEventListener("pointerup", end);
-    el.addEventListener("pointercancel", end);
+
+    const release = () => {
+      if (!dragging) return;
+      dragging = false;
+      el.classList.remove("dragging");
+      el.style.rotate = baseRot + "deg";
+      if (reduce) return;
+
+      // glide + bounce off the edges after a throw
+      const step = () => {
+        const maxX = zone.clientWidth - el.offsetWidth;
+        const maxY = zone.clientHeight - el.offsetHeight;
+        let x = el.offsetLeft + vx;
+        let y = el.offsetTop + vy;
+        if (x < 0) { x = 0; vx *= -0.6; }
+        if (x > maxX) { x = maxX; vx *= -0.6; }
+        if (y < 0) { y = 0; vy *= -0.6; }
+        if (y > maxY) { y = maxY; vy *= -0.6; }
+        place(x, y);
+        vx *= 0.94; vy *= 0.94;
+        if (Math.abs(vx) + Math.abs(vy) > 0.4) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+    el.addEventListener("pointerup", release);
+    el.addEventListener("pointercancel", release);
   });
 
   /* ---------- placeholder links ---------- */
