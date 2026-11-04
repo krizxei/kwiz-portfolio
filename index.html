@@ -4,210 +4,351 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Krizten Antoinette B. Lapuz — Portfolio</title>
-  <meta name="description" content="Krizten Antoinette B. Lapuz (Kwiz) — BSIT student at TUP Manila. UI/UX, web & app development, and graphic design." />
-  <meta name="theme-color" content="#f6e9ff" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✿</text></svg>" />
+  <meta name="description" content="Krizten Antoinette B. Lapuz (Kwiz) — 4th-year BSIT student at TUP Manila. UI/UX, web & app development, and graphic design." />
+  <meta name="theme-color" content="#fff3f8" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Krizten Antoinette B. Lapuz — Portfolio" />
+  <meta property="og:description" content="4th-year BSIT student at TUP Manila. UI/UX, web & app development, and graphic design." />
+  <meta property="og:image" content="https://kwiz-portfolio.vercel.app/gwb-avatar.png" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🦆%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script>
+    document.documentElement.classList.add('js');
+    setTimeout(function () {
+      if (!window.__kwizOK) document.documentElement.classList.add('nojs-fallback');
+    }, 4500);
+  </script>
 </head>
 <body>
-  <div class="progress" id="progress"></div>
-  <div class="glow" id="glow" aria-hidden="true"></div>
+  <!-- ============ shared SVG art (stickers + duck) ============ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="s-duck" viewBox="0 0 130 110">
+        <ellipse cx="62" cy="102" rx="40" ry="5" fill="rgba(60,30,90,.12)" />
+        <path d="M14 66 L2 52 L30 58 Z" fill="#f7cf4a" stroke="#c99a1b" stroke-width="4" stroke-linejoin="round" />
+        <ellipse cx="56" cy="74" rx="42" ry="28" fill="#f7cf4a" stroke="#c99a1b" stroke-width="4" />
+        <circle cx="88" cy="40" r="23" fill="#f7cf4a" stroke="#c99a1b" stroke-width="4" />
+        <path d="M106 40 q20 1 18 9 q-10 6 -20 -1 z" fill="#f08a3c" stroke="#c9692a" stroke-width="3" stroke-linejoin="round" />
+        <circle cx="92" cy="35" r="3.4" fill="#2b1a2e" />
+        <ellipse cx="98" cy="47" rx="5" ry="3" fill="#ff9fb8" opacity=".75" />
+        <path d="M34 72 q16 -16 34 0 q-12 16 -34 0z" fill="#f2bf30" stroke="#c99a1b" stroke-width="3.5" stroke-linejoin="round" />
+        <path d="M74 22 l-12 -8 v16 z M74 22 l12 -8 v16 z" fill="#f48fc3" stroke="#b9487f" stroke-width="3" stroke-linejoin="round" />
+        <circle cx="74" cy="22" r="4" fill="#f48fc3" stroke="#b9487f" stroke-width="3" />
+      </symbol>
+      <symbol id="s-bow" viewBox="0 0 100 70">
+        <path d="M50 35 L8 8 L8 62 Z" fill="#f48fc3" stroke="#b9487f" stroke-width="5" stroke-linejoin="round" />
+        <path d="M50 35 L92 8 L92 62 Z" fill="#f48fc3" stroke="#b9487f" stroke-width="5" stroke-linejoin="round" />
+        <circle cx="50" cy="35" r="10" fill="#ff8fc7" stroke="#b9487f" stroke-width="5" />
+      </symbol>
+      <symbol id="s-flower" viewBox="0 0 100 100">
+        <g fill="#ff8fc7" stroke="#b9487f" stroke-width="4">
+          <circle cx="50" cy="22" r="19" /><circle cx="76.6" cy="41.3" r="19" /><circle cx="66.5" cy="72.7" r="19" />
+          <circle cx="33.5" cy="72.7" r="19" /><circle cx="23.4" cy="41.3" r="19" />
+        </g>
+        <circle cx="50" cy="50" r="13" fill="#f7cf4a" stroke="#c99a1b" stroke-width="4" />
+      </symbol>
+      <symbol id="s-spark" viewBox="0 0 100 100">
+        <path d="M50 6 Q55 45 94 50 Q55 55 50 94 Q45 55 6 50 Q45 45 50 6Z" fill="#ffe27a" stroke="#c99a1b" stroke-width="4" stroke-linejoin="round" />
+      </symbol>
+      <symbol id="s-heart" viewBox="0 0 100 90">
+        <path d="M50 84 C10 56 4 30 22 14 C36 2 50 14 50 24 C50 14 64 2 78 14 C96 30 90 56 50 84Z" fill="#ff8fc7" stroke="#b9487f" stroke-width="5" stroke-linejoin="round" />
+      </symbol>
+      <symbol id="s-bubble" viewBox="0 0 170 110">
+        <path d="M30 6 H140 Q164 6 164 30 V58 Q164 82 140 82 H78 L58 104 L56 82 H30 Q6 82 6 58 V30 Q6 6 30 6Z" fill="#d96a80" stroke="#a84560" stroke-width="5" stroke-linejoin="round" />
+        <text x="85" y="57" text-anchor="middle" font-family="DM Mono, monospace" font-weight="700" font-size="34" fill="#fff">&lt;/&gt;</text>
+      </symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#about">skip to content</a>
+
+  <!-- ============ background layers ============ -->
+  <div class="paper" aria-hidden="true"></div>
   <div class="blob b1" aria-hidden="true"></div>
   <div class="blob b2" aria-hidden="true"></div>
-  <div class="blob b3" aria-hidden="true"></div>
+  <div class="doodles" aria-hidden="true">
+    <span data-depth="1.2" style="left:6%;top:18%"><b>&lt;/&gt;</b></span>
+    <span data-depth="-.8" style="left:88%;top:12%"><b>{ }</b></span>
+    <span data-depth="1.6" style="left:46%;top:8%"><b>;</b></span>
+    <span data-depth="-1.4" style="left:93%;top:55%"><b>01</b></span>
+    <span data-depth="1" style="left:3%;top:62%"><b>( )</b></span>
+    <span data-depth="-1" style="left:30%;top:90%"><b>=&gt;</b></span>
+    <span data-depth="1.4" style="left:72%;top:86%"><b>✿</b></span>
+    <span data-depth="-1.2" style="left:18%;top:40%"><b>#</b></span>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
 
-  <header class="nav">
-    <a href="#top" class="logo">kwiz<span>✿</span></a>
-    <nav>
+  <!-- ============ nav ============ -->
+  <header class="nav" id="nav">
+    <a href="#top" class="logo" data-cursor="home">kwiz<span>✿</span></a>
+    <nav id="navLinks" aria-label="Main">
+      <i class="pill" aria-hidden="true"></i>
       <a href="#about">about</a>
       <a href="#skills">skills</a>
       <a href="#work">work</a>
       <a href="#journey">journey</a>
       <a href="#contact">contact</a>
     </nav>
-    <button class="theme" id="theme" aria-label="Toggle night mode">☾</button>
+    <div class="nav-right">
+      <button class="theme" id="theme" aria-label="Toggle night mode" data-cursor="day / night">☾</button>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
   </header>
 
-  <main id="top">
-    <!-- HERO -->
-    <section class="hero">
-      <p class="eyebrow">Krizten Antoinette B. Lapuz · portfolio 2026</p>
-      <h1>hi, i'm <span class="grad">Kwiz</span><span class="wave">✿</span></h1>
-      <p class="rotator">I'm a <span id="typed" class="typed"></span><span class="caret">|</span></p>
-      <p class="lead">I'm a 4th-year IT student at TUP Manila who builds websites and apps and designs clean interfaces. I like making things that are simple, useful, and a little bit pretty.</p>
-      <div class="cta">
-        <a href="#work" class="btn magnetic">see my work</a>
-        <a href="#contact" class="btn ghost magnetic">say hello</a>
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="top" data-duck="hi! i'm the debugging duck. click me 🦆">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow pop" style="--i:0"><span class="live"></span> Krizten Antoinette B. Lapuz · portfolio 2026</p>
+          <h1 class="pop" style="--i:1">
+            <span class="hi">hi, i'm</span>
+            <span class="name"><span class="word" id="nameWord" data-cursor="poke me">Kwiz</span><span class="flower" aria-hidden="true">✿</span></span>
+          </h1>
+          <p class="rotator pop" style="--i:2">I'm a <span id="typed" class="typed"></span><span class="caret">|</span></p>
+          <p class="lead pop" style="--i:3">I'm a 4th-year IT student at TUP Manila who builds websites and apps and designs clean interfaces. I like making things that are simple, useful, and a little bit pretty.</p>
+          <div class="cta pop" style="--i:4">
+            <a href="#work" class="btn magnetic">see my work</a>
+            <a href="#contact" class="btn ghost magnetic">say hello</a>
+          </div>
+          <p class="hint pop" style="--i:5">psst… drag &amp; throw the stickers · poke the duck 🦆</p>
+        </div>
+
+        <div class="hero-card pop" style="--i:2">
+          <div class="card-float">
+            <div class="card3d tiltable" id="holo" data-cursor="tilt me">
+              <img src="gwb-avatar.png" alt="Girls Who Build PH avatar card for kwiztenn, Data Girlie, Luzon" onerror="this.closest('.hero-card').style.display='none'" />
+              <span class="holo" aria-hidden="true"></span>
+              <span class="glare" aria-hidden="true"></span>
+            </div>
+            <span class="tape" aria-hidden="true"></span>
+            <span class="card-note" aria-hidden="true">my GWB card ✿</span>
+          </div>
+        </div>
       </div>
 
-      <div class="stickers" aria-hidden="true">
-        <div class="sticker s1" data-drag>UI/UX 💜</div>
-        <div class="sticker s2" data-drag>Girl tech 👩‍💻</div>
-        <div class="sticker s3" data-drag>Figma ✨</div>
-        <div class="sticker s4" data-drag>Canva 🎀</div>
-        <div class="sticker s5" data-drag>Web Dev 🌸</div>
+      <!-- draggable, throwable stickers -->
+      <div class="stickers" id="stickers" aria-hidden="true">
+        <div class="sticker lbl c-pink" data-drag data-d=".46,.16" data-m=".02,.60" data-r="6" style="--i:0">UI/UX 💜</div>
+        <div class="sticker lbl c-lav" data-drag data-d=".93,.30" data-m=".98,.66" data-r="-7" style="--i:1">Girl tech 👩‍💻</div>
+        <div class="sticker lbl c-butter" data-drag data-d=".58,.86" data-m=".04,.90" data-r="5" style="--i:2">Figma ✨</div>
+        <div class="sticker lbl c-coral hide-m" data-drag data-d=".74,.95" data-r="-9" style="--i:3">Canva 🎀</div>
+        <div class="sticker lbl c-pink hide-m" data-drag data-d=".44,.92" data-r="4" style="--i:4">Web Dev 🌸</div>
+        <div class="sticker art" data-drag data-d=".55,.24" data-m=".80,.17" data-r="-12" style="--i:5"><svg style="width:84px;height:59px"><use href="#s-bow" /></svg></div>
+        <div class="sticker art hide-m" data-drag data-d=".70,.14" data-r="-4" style="--i:6"><svg style="width:112px;height:72px"><use href="#s-bubble" /></svg></div>
+        <div class="sticker art hide-m" data-drag data-d=".96,.12" data-r="15" style="--i:7"><svg style="width:64px;height:64px"><use href="#s-flower" /></svg></div>
+        <div class="sticker art hide-m" data-drag data-d=".58,.62" data-r="0" style="--i:8"><svg style="width:50px;height:50px"><use href="#s-spark" /></svg></div>
+        <div class="sticker art" data-drag data-d=".82,.92" data-m=".94,.92" data-r="10" style="--i:9"><svg style="width:58px;height:52px"><use href="#s-heart" /></svg></div>
       </div>
-      <p class="hint">psst… drag and throw the stickers ✦</p>
     </section>
 
-    <!-- ABOUT -->
-    <section id="about" class="section reveal">
-      <h2><span>01</span> about me</h2>
+    <!-- ============ crossing marquee bands ============ -->
+    <div class="bands" aria-hidden="true">
+      <div class="band b-pink" data-dir="-1"><div class="track"><span>UI/UX</span><span>Figma</span><span>Web dev</span><span>App dev</span><span>Canva</span><span>Girl tech</span><span>Data girlie</span><span>Journalism</span><span>GitHub</span></div></div>
+      <div class="band b-lav" data-dir="1"><div class="track"><span>Simple</span><span>Useful</span><span>A little bit pretty</span><span>Thesis survivor</span><span>Pastel enthusiast</span><span>Rubber duck debugger</span></div></div>
+    </div>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="about" class="section reveal" data-duck="she codes AND designs. quack.">
+      <h2 class="h2 st" style="--i:0"><small class="code">/* 01 */</small> about <em>me<svg viewBox="0 0 152 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q15 0 30 8 T60 8 T90 8 T120 8 T150 8" /></svg></em></h2>
       <div class="about-grid">
-        <div class="card about-card">
-          <p>I'm a creative who codes. My background spans <strong>graphic design</strong>, <strong>journalism</strong>, and <strong>social media</strong>, so I care about how something looks, how it reads, and how people feel using it.</p>
-          <p>I build web and mobile apps, design interfaces in Figma, and I'm currently completing my undergraduate thesis. I'm also a consistent Dean's Lister at the Technological University of the Philippines – Manila.</p>        </div>
-        <div class="side">
-          <figure class="portrait">
+        <div class="notebook st" style="--i:1">
+          <p class="scribble">hello! ✿ nice to meet you</p>
+          <p>I'm a creative who codes. My background spans <mark>graphic design</mark>, <mark>journalism</mark>, and <mark>social media</mark>, so I care about how something looks, how it reads, and how people feel using it.</p>
+          <p>I build web and mobile apps, design interfaces in Figma, and I'm currently completing my undergraduate thesis. I'm also a consistent Dean's Lister at the Technological University of the Philippines – Manila.</p>
+        </div>
+
+        <div class="side st" style="--i:2">
+          <figure class="portrait" data-cursor="hi!">
+            <span class="washi" aria-hidden="true"></span>
             <img src="kwiz-photo.jpg" alt="Portrait of Krizten Antoinette B. Lapuz" onerror="this.closest('figure').style.display='none'" />
             <figcaption>kwiz ✿</figcaption>
           </figure>
-          <div class="stats">
-          <div class="stat card"><b data-count="4">0</b><span>year BSIT student</span></div>
-          <div class="stat card"><b data-count="3">0</b><span>creative worlds: design · writing · code</span></div>
-          <div class="stat card"><b>∞</b><span>pastel palettes tried</span></div>
+          <div class="notes">
+            <p class="note n1"><b>now:</b> building MySalapi, my thesis 📱</p>
+            <p class="note n2">4th-year BSIT · TUP Manila</p>
+            <p class="note n3">recipe: simple + useful + a little bit pretty</p>
+            <p class="note n4">duck-powered debugging 🦆</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SKILLS -->
-    <section id="skills" class="section reveal">
-      <h2><span>02</span> skills &amp; tools</h2>
-      <div class="skill-groups">
-        <div class="card">
+    <!-- ============ SKILLS ============ -->
+    <section id="skills" class="section reveal" data-duck="peel a sticker! (hover or click)">
+      <h2 class="h2 st" style="--i:0"><small class="code">/* 02 */</small> skills <em>&amp; tools<svg viewBox="0 0 152 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q15 0 30 8 T60 8 T90 8 T120 8 T150 8" /></svg></em></h2>
+      <div class="sheets">
+        <div class="sheet st" style="--i:1" data-sheet="01">
           <h3>build</h3>
-          <div class="chips">
-            <span>Web development</span><span>App development</span><span>HTML · CSS · JS</span><span>Android</span><span>GitHub</span>
-          </div>
+          <div class="chips"><span>Web development</span><span>App development</span><span>HTML · CSS · JS</span><span>Android</span><span>GitHub</span></div>
         </div>
-        <div class="card">
+        <div class="sheet st" style="--i:2" data-sheet="02">
           <h3>design</h3>
-          <div class="chips">
-            <span>UI/UX</span><span>Figma</span><span>Canva</span><span>Graphic design</span><span>Branding</span>
-          </div>
+          <div class="chips"><span>UI/UX</span><span>Figma</span><span>Canva</span><span>Graphic design</span><span>Branding</span></div>
         </div>
-        <div class="card">
+        <div class="sheet st" style="--i:3" data-sheet="03">
           <h3>communicate</h3>
-          <div class="chips">
-            <span>Journalism</span><span>Social media</span><span>Content writing</span><span>E-commerce</span>
-          </div>
+          <div class="chips"><span>Journalism</span><span>Social media</span><span>Content writing</span><span>E-commerce</span></div>
         </div>
-        <div class="card">
+        <div class="sheet st" style="--i:4" data-sheet="04">
           <h3>productivity</h3>
-          <div class="chips">
-            <span>Google Workspace</span><span>Microsoft 365</span><span>Documentation</span><span>Teamwork</span>
-          </div>
+          <div class="chips"><span>Google Workspace</span><span>Microsoft 365</span><span>Documentation</span><span>Teamwork</span></div>
         </div>
       </div>
     </section>
 
-    <!-- WORK -->
-    <section id="work" class="section reveal">
-      <h2><span>03</span> selected work</h2>
-      <div class="projects">
-        <article class="project tilt">
-          <div class="thumb t1"><span>💸</span></div>
-          <div class="body">
+    <!-- ============ WORK ============ -->
+    <section id="work" class="section reveal" data-duck="ooh, windows. hover them!">
+      <h2 class="h2 st" style="--i:0"><small class="code">/* 03 */</small> selected <em>work<svg viewBox="0 0 152 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q15 0 30 8 T60 8 T90 8 T120 8 T150 8" /></svg></em></h2>
+      <div class="windows">
+        <article class="win tiltable st" style="--i:1" data-cursor="peek">
+          <div class="win-bar"><i></i><i></i><i></i><span>mysalapi.app</span></div>
+          <div class="win-screen s1"><span class="emo">💸</span></div>
+          <div class="win-body">
             <small>Undergraduate thesis · Android</small>
             <h3>MySalapi</h3>
             <p>A personal mobile financial management app built as my thesis project, designed to make tracking money feel simple and approachable.</p>
             <div class="tags"><span>Mobile</span><span>UI/UX</span><span>Thesis</span></div>
-            <span class="link soon">coming soon ✿</span>
+            <p class="status"><i></i> case study coming soon</p>
           </div>
+          <span class="glare" aria-hidden="true"></span>
         </article>
 
-        <article class="project tilt">
-          <div class="thumb t2"><span>🏡</span></div>
-          <div class="body">
+        <article class="win tiltable st" style="--i:2" data-cursor="peek">
+          <div class="win-bar"><i></i><i></i><i></i><span>staycrafty.html</span></div>
+          <div class="win-screen s2"><span class="emo">🏡</span></div>
+          <div class="win-body">
             <small>Web development course</small>
             <h3>StayCrafty</h3>
             <p>A website I built for my web development course, focused on clean layout, responsive design, and a welcoming look and feel.</p>
             <div class="tags"><span>Web</span><span>Responsive</span><span>Frontend</span></div>
-            <span class="link soon">coming soon ✿</span>
+            <p class="status"><i></i> case study coming soon</p>
           </div>
+          <span class="glare" aria-hidden="true"></span>
         </article>
 
-        <article class="project tilt">
-          <div class="thumb t3"><span>🛒</span></div>
-          <div class="body">
+        <article class="win tiltable st" style="--i:3" data-cursor="peek">
+          <div class="win-bar"><i></i><i></i><i></i><span>kita-kita.plan</span></div>
+          <div class="win-screen s3"><span class="emo">🛒</span></div>
+          <div class="win-body">
             <small>Group entrepreneurship project</small>
             <h3>Kita-Kita</h3>
             <p>A business plan and concept for a sari-sari store management app, helping small neighborhood stores run smarter.</p>
             <div class="tags"><span>Business plan</span><span>App concept</span><span>Teamwork</span></div>
-            <span class="link soon">coming soon ✿</span>
+            <p class="status"><i></i> case study coming soon</p>
           </div>
+          <span class="glare" aria-hidden="true"></span>
         </article>
 
-        <article class="project tilt">
-          <div class="thumb t4"><span>🌈</span></div>
-          <div class="body">
+        <article class="win tiltable st" style="--i:4" data-cursor="peek">
+          <div class="win-bar"><i></i><i></i><i></i><span>kriznbows.brand</span></div>
+          <div class="win-screen s4"><span class="emo">🌈</span></div>
+          <div class="win-body">
             <small>Social media · Branding</small>
             <h3>kriznbows</h3>
             <p>My thrift business brand: content, visuals, and community-building on social media from start to finish.</p>
             <div class="tags"><span>Social media</span><span>Branding</span><span>Canva</span></div>
-            <span class="link soon">coming soon ✿</span>
+            <p class="status"><i></i> case study coming soon</p>
           </div>
+          <span class="glare" aria-hidden="true"></span>
         </article>
       </div>
     </section>
 
-    <!-- JOURNEY -->
-    <section id="journey" class="section reveal">
-      <h2><span>04</span> my journey</h2>
-      <ol class="timeline">
-        <li class="card has-media">
-          <div>
+    <!-- ============ JOURNEY ============ -->
+    <section id="journey" class="section reveal" data-duck="scroll! the path draws itself ✿">
+      <h2 class="h2 st" style="--i:0"><small class="code">/* 04 */</small> my <em>journey<svg viewBox="0 0 152 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q15 0 30 8 T60 8 T90 8 T120 8 T150 8" /></svg></em></h2>
+      <ol class="path" id="path">
+        <li class="stop">
+          <span class="node" aria-hidden="true">✿</span>
+          <div class="card">
             <time>Now</time>
             <h3>Member · Girls Who Build PH</h3>
             <p>Part of a community of girls and women building in tech in the Philippines.</p>
+            <a class="mini" href="#top" data-cursor="see card">see my card ↑</a>
           </div>
-          <img class="gwb-card" src="gwb-avatar.png" alt="Girls Who Build PH avatar card for kwiztenn" onerror="this.style.display='none'" />
         </li>
-        <li class="card">
-          <time>Now</time>
-          <h3>Member · Google Developer Campus TUP Manila</h3>
-          <p>Learning, building, and connecting with fellow student developers on campus.</p>
+        <li class="stop">
+          <span class="node" aria-hidden="true">✿</span>
+          <div class="card">
+            <time>Now</time>
+            <h3>Member · Google Developer Campus TUP Manila</h3>
+            <p>Learning, building, and connecting with fellow student developers on campus.</p>
+          </div>
         </li>
-        <li class="card">
-          <time>Now</time>
-          <h3>4th-year BSIT · TUP Manila</h3>
-          <p>Completing my undergraduate thesis while keeping up my record as a consistent Dean's Lister.</p>
+        <li class="stop">
+          <span class="node" aria-hidden="true">✿</span>
+          <div class="card">
+            <time>Now</time>
+            <h3>4th-year BSIT · TUP Manila</h3>
+            <p>Completing my undergraduate thesis while keeping up my record as a consistent Dean's Lister.</p>
+          </div>
         </li>
-        <li class="card">
-          <time>Previous role</time>
-          <h3>IT &amp; E-Commerce Coordinator · LJ Farm Supply &amp; General Merchandize</h3>
-          <p>Managed the business's e-commerce and social media presence, mixing tech, content, and customer-facing work.</p>
+        <li class="stop">
+          <span class="node" aria-hidden="true">✿</span>
+          <div class="card">
+            <time>Previous role</time>
+            <h3>IT &amp; E-Commerce Coordinator · LJ Farm Supply &amp; General Merchandize</h3>
+            <p>Managed the business's e-commerce and social media presence, mixing tech, content, and customer-facing work.</p>
+          </div>
         </li>
-        <li class="card">
-          <time>2023 – 2024</time>
-          <h3>COMPASS</h3>
-          <p>Student organization experience that grew my teamwork and creative skills.</p>
+        <li class="stop">
+          <span class="node" aria-hidden="true">✿</span>
+          <div class="card">
+            <time>2023 – 2024</time>
+            <h3>COMPASS</h3>
+            <p>Student organization experience that grew my teamwork and creative skills.</p>
+          </div>
         </li>
-        <li class="card">
-          <time>2022 – 2023</time>
-          <h3>TUPGEAR</h3>
-          <p>My first stint in campus org life, learning how to collaborate and create with other students.</p>
+        <li class="stop">
+          <span class="node" aria-hidden="true">✿</span>
+          <div class="card">
+            <time>2022 – 2023</time>
+            <h3>TUPGEAR</h3>
+            <p>My first stint in campus org life, learning how to collaborate and create with other students.</p>
+          </div>
         </li>
       </ol>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section reveal">
-      <div class="contact card">
-        <h2 class="center">let's make something pretty <span class="wave">✿</span></h2>
-        <p class="center">Open to internships, collabs, and creative projects. My inbox is always open.</p>
-        <div class="cta center">
-          <a class="btn magnetic" href="https://www.linkedin.com/in/lapuzkriztenantoinette/" target="_blank" rel="noopener">connect on LinkedIn</a>
+    <!-- ============ CONTACT + TERMINAL ============ -->
+    <section id="contact" class="section reveal" data-duck="try typing 'help' in the terminal!">
+      <div class="contact-grid">
+        <div class="cta-card st" style="--i:0">
+          <p class="code-line">/* 05 */</p>
+          <h2>let's make something <em>pretty</em> <span class="flower">✿</span></h2>
+          <p class="sub">Open to internships, collabs, and creative projects. My inbox is always open.</p>
+          <div class="cta">
+            <a class="btn magnetic" href="https://www.linkedin.com/in/lapuzkriztenantoinette/" target="_blank" rel="noopener">connect on LinkedIn</a>
+          </div>
+          <div class="socials">
+            <a href="https://github.com/krizxei" target="_blank" rel="noopener">GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/lapuzkriztenantoinette/" target="_blank" rel="noopener">LinkedIn ↗</a>
+            <a href="https://www.instagram.com/kwiztenn/" target="_blank" rel="noopener">Instagram ↗</a>
+            <a href="https://www.facebook.com/kriztenantoinette.lapuz" target="_blank" rel="noopener">Facebook ↗</a>
+          </div>
         </div>
-        <div class="socials center">
-          <a href="https://github.com/krizxei" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/lapuzkriztenantoinette/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://www.instagram.com/kwiztenn/" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://www.facebook.com/kriztenantoinette.lapuz" target="_blank" rel="noopener">Facebook</a>
+
+        <div class="term st" style="--i:1" id="term" data-cursor="type here">
+          <div class="term-bar"><i></i><i></i><i></i><span>kwiz.sh — ✿</span></div>
+          <div class="term-body" id="termBody" aria-live="polite"></div>
+          <form class="term-form" id="termForm" autocomplete="off">
+            <label for="termInput" class="prompt">guest@kwiz:~$</label>
+            <input id="termInput" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Type a command" />
+          </form>
+          <div class="term-chips">
+            <button type="button" data-cmd="help">help</button>
+            <button type="button" data-cmd="about">about</button>
+            <button type="button" data-cmd="skills">skills</button>
+            <button type="button" data-cmd="projects">projects</button>
+            <button type="button" data-cmd="links">links</button>
+            <button type="button" data-cmd="duck">duck</button>
+            <button type="button" data-cmd="sudo hire kwiz">sudo hire kwiz</button>
+          </div>
         </div>
       </div>
     </section>
@@ -215,8 +356,16 @@
 
   <footer class="foot">
     <p>© <span id="year"></span> Krizten Antoinette B. Lapuz · made with 💜</p>
-    <button id="toTop" class="btn ghost small">back to top ↑</button>
+    <button id="toTop" class="btn ghost small" data-cursor="up we go">back to top ↑</button>
   </footer>
+
+  <!-- ============ rubber duck companion ============ -->
+  <div class="duck" id="duck">
+    <div class="duck-bubble" id="duckBubble" role="status"></div>
+    <button class="duck-bob" id="duckBody" aria-label="Poke the rubber duck" data-cursor="quack?">
+      <span class="duck-flip" id="duckFlip"><svg viewBox="0 0 130 110"><use href="#s-duck" /></svg></span>
+    </button>
+  </div>
 
   <script src="script.js"></script>
 </body>
