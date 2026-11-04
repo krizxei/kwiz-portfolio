@@ -15,6 +15,8 @@
   --lav: #b99cf5;
   --lav2: #e3d4ff;
   --butter: #f7cf4a;
+  --matcha: #a9d49a;
+  --matcha2: #d7f0cf;
   --card: rgba(255, 255, 255, 0.78);
   --border: rgba(185, 156, 245, 0.42);
   --shadow: 0 12px 40px -14px rgba(150, 100, 220, 0.4);
@@ -405,7 +407,7 @@ mark {
 }
 .chips span:nth-child(3n + 1) { background: var(--pink2); }
 .chips span:nth-child(3n + 2) { background: var(--lav2); }
-.chips span:nth-child(3n) { background: #fff0a8; }
+.chips span:nth-child(3n) { background: var(--matcha2); }
 .chips span::after {
   content: ""; position: absolute; right: 0; bottom: 0; width: 0; height: 0; border-top-left-radius: 10px;
   background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.9) 50%); box-shadow: -2px -2px 6px rgba(120, 80, 180, 0.25);
@@ -465,14 +467,14 @@ mark {
 .path::before { bottom: 0; background: repeating-linear-gradient(var(--lav2) 0 10px, transparent 10px 20px); }
 .path::after { height: calc(var(--p, 0) * 100%); background: linear-gradient(var(--pink), var(--lav)); }
 .stop { position: relative; width: calc(50% - 46px); }
-.stop:nth-child(odd) { justify-self: start; }
-.stop:nth-child(even) { justify-self: end; }
+.stop:nth-of-type(odd) { justify-self: start; }
+.stop:nth-of-type(even) { justify-self: end; }
 .node {
   position: absolute; top: 22px; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; font-size: 0.9rem;
   background: var(--bg); color: var(--lav); border: 3px solid var(--lav); transition: all 0.5s var(--ease);
 }
-.stop:nth-child(odd) .node { left: calc(100% + 28px); }
-.stop:nth-child(even) .node { right: calc(100% + 28px); }
+.stop:nth-of-type(odd) .node { left: calc(100% + 28px); }
+.stop:nth-of-type(even) .node { right: calc(100% + 28px); }
 .stop.on .node { background: var(--pink); color: #fff; border-color: var(--pink); transform: rotate(180deg) scale(1.2); box-shadow: 0 0 0 8px rgba(255, 143, 199, 0.25); }
 .stop .card {
   padding: 22px 24px; border-radius: 24px; background: var(--card); border: 1px solid var(--border); box-shadow: var(--shadow);
