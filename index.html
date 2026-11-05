@@ -91,6 +91,7 @@
 
   <!-- ============ background layers ============ -->
   <div class="paper" aria-hidden="true"></div>
+  <div class="spot" aria-hidden="true"></div>
   <div class="blob b1" aria-hidden="true"></div>
   <div class="blob b2" aria-hidden="true"></div>
   <div class="doodles" aria-hidden="true">
@@ -133,12 +134,13 @@
       <span class="lvl">LVL 4</span>
       <span class="xpbar" aria-hidden="true"><b id="xpFill"></b></span>
       <span class="xptxt" id="xpTxt">0%</span>
-      <span class="trophy">🏆 <span id="achCount">0</span>/<span id="achTotal">8</span></span>
+      <span class="trophy">🏆 <span id="achCount">0</span>/<span id="achTotal">11</span></span>
     </button>
     <div class="hud-panel" id="achPanel" role="region" aria-label="Achievements">
       <p class="hud-title">achievements</p>
       <ul id="achList"></ul>
       <p class="hud-hint">poke around to unlock them all ✿</p>
+      <button type="button" class="play-btn" data-play>🎮 play the mini game</button>
     </div>
   </div>
   <div class="toasts" id="toasts" aria-live="polite"></div>
@@ -166,9 +168,10 @@
             <span class="name"><span class="word" id="nameWord" data-cursor="poke me">Kwiz</span><span class="flower" aria-hidden="true">✿</span></span>
           </h1>
           <p class="rotator pop" style="--i:2">I'm a <span id="typed" class="typed"></span><span class="caret">|</span></p>
-          <p class="lead pop" style="--i:3">I'm a 4th-year IT student at TUP Manila who builds websites and apps and designs clean interfaces. I like making things that are simple, useful, and a little bit pretty.</p>
+          <p class="lead pop" style="--i:3">4th-year BSIT student at TUP Manila who designs and builds web and mobile apps. With a background in graphic design, social media and journalism, I make products that are functional, well presented and easy to use.</p>
           <div class="cta pop" style="--i:4">
             <a href="#work" class="btn magnetic">see my work</a>
+            <a href="Lapuz_CV.pdf" class="btn cv magnetic" download="Krizten-Lapuz-CV.pdf" data-cv data-cursor="download">⬇ download CV</a>
             <a href="#contact" class="btn ghost magnetic">say hello</a>
           </div>
           <p class="hint pop" style="--i:5">psst… drag &amp; throw the stickers · poke the duck 🦆 · unlock the 🏆</p>
@@ -209,7 +212,7 @@
 
     <!-- ============ crossing marquee bands ============ -->
     <div class="bands" aria-hidden="true">
-      <div class="band b-pink" data-dir="-1"><div class="track"><span>UI/UX</span><span>Figma</span><span>Web dev</span><span>App dev</span><span>Canva</span><span>Girl tech</span><span>Data girlie</span><span>Database design</span><span>GitHub</span><span>System analysis</span></div></div>
+      <div class="band b-pink" data-dir="-1"><div class="track"><span>UI/UX</span><span>Figma</span><span>Web dev</span><span>App dev</span><span>Canva</span><span>Girl tech</span><span>Data girlie</span><span>Journalism</span><span>GitHub</span><span>Gamer</span></div></div>
       <div class="band b-lav" data-dir="1"><div class="track"><span>UI/UX Design</span><span>Web Development</span><span>Mobile App Development</span><span>Front-End</span><span>API Integration</span><span>Laravel</span><span>React Native</span><span>Git &amp; GitHub</span><span>IT Support</span><span>Visual Branding</span><span>Rubber duck debugger</span></div></div>
     </div>
 
@@ -222,9 +225,10 @@
             <span class="bookmark" aria-hidden="true"></span>
             <svg class="nb-bow" viewBox="0 0 100 70" aria-hidden="true"><use href="#s-bow" /></svg>
             <p class="scribble">hello! ✿ nice to meet you</p>
-            <p>I started out in <mark>graphic design</mark>, <mark>social media</mark>, and <mark>journalism</mark>, then grew into web and mobile app development. That mix lets me build things that work well and also look and read well.</p>
-            <p>I'm a 4th-year BSIT student at the Technological University of the Philippines – Manila and a consistent Dean's Lister. I'm reliable, organized, and always eager to contribute to projects and events.</p>
-            <p>I focus on delivering designs that are not only visually appealing but also <mark>functional</mark> and aligned with business goals. By understanding target audiences and brand positioning, I aim to create meaningful visual experiences that strengthen brand presence and improve engagement across platforms.</p>
+            <p>I started out in <mark>graphic design</mark>, <mark>social media</mark>, and <mark>journalism</mark>, then grew into web and mobile app development. That mix lets me build products that work well and also look and read well.</p>
+            <p>I'm a 4th-year BSIT student at the Technological University of the Philippines – Manila and a consistent Dean's Lister. I'm reliable, organized, and always ready to contribute to projects and events, and I'm active in Girls Who Build PH and Google Developer Campus TUP Manila.</p>
+            <p>My approach: understand the audience and the brand first, then deliver designs that are visually appealing, <mark>functional</mark> and aligned with business goals, so the brand shows up stronger and people engage more across platforms.</p>
+            <p class="open-to"><b>open to:</b> <span>internships</span><span>org officer roles</span><span>collaborations</span></p>
           </div>
 
           <article class="idcard tiltable" id="idcard" data-cursor="player id">
@@ -252,7 +256,7 @@
             <figcaption>kwiz ✿</figcaption>
           </figure>
           <div class="notes">
-            <p class="note n1"><b>now:</b> building MySalapi, my thesis 📱</p>
+            <p class="note n1"><b>now:</b> building MySalapi, my undergrad thesis 📱</p>
             <p class="note n2">4th-year BSIT · TUP Manila</p>
             <p class="note n3">recipe: simple + useful + a little bit pretty</p>
             <p class="note n4">player 1 🎮 gamer (for real)</p>
@@ -261,11 +265,18 @@
           </div>
         </div>
       </div>
+      <div class="statrow st" style="--i:3">
+        <div><b data-count="4">0</b><span>projects built</span></div>
+        <div><b data-count="4">0</b><span>orgs &amp; communities</span></div>
+        <div><b data-count="17">0</b><span>months of work experience</span></div>
+        <div><b data-count="1">0</b><span>thesis in progress</span></div>
+      </div>
     </section>
 
     <!-- ============ SKILLS ============ -->
     <section id="skills" class="section reveal" data-duck="peel a sticker! (hover or click)">
       <h2 class="h2 st" style="--i:0"><small class="code">/* 02 */</small> skills <em>&amp; tools<svg viewBox="0 0 152 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q15 0 30 8 T60 8 T90 8 T120 8 T150 8" /></svg></em></h2>
+      <p class="sec-lead st" style="--i:1">Design, development and communication skills, used in real projects and a real job. Tap a sticker to peel it.</p>
       <div class="sheets">
         <div class="sheet st" style="--i:1" data-sheet="01">
           <h3>development &amp; IT</h3>
@@ -297,6 +308,7 @@
     <!-- ============ WORK ============ -->
     <section id="work" class="section reveal" data-duck="ooh, windows. hover them!">
       <h2 class="h2 st" style="--i:0"><small class="code">/* 03 */</small> selected <em>work<svg viewBox="0 0 152 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q15 0 30 8 T60 8 T90 8 T120 8 T150 8" /></svg></em></h2>
+      <p class="sec-lead st" style="--i:1">Projects that show how I design and build. Open any window's “what I built” to see my exact contributions.</p>
       <div class="windows">
         <article class="win tiltable st" style="--i:1" data-cursor="peek">
           <div class="win-bar"><i></i><i></i><i></i><span>mysalapi.app</span><svg class="bar-bow" viewBox="0 0 100 70" aria-hidden="true"><use href="#s-bow" /></svg></div>
@@ -304,15 +316,15 @@
           <div class="win-body">
             <small>Undergraduate thesis · Android · 2026–2027</small>
             <h3>MySalapi</h3>
-            <p>A team-built Android app for tracking personal finances, loans, and shared group expenses.</p>
+            <p>A team-built Android app for tracking personal finances, loans and shared group expenses. I built the email integration, the full sign-in flow and key payment features.</p>
             <div class="tags"><span>Mobile</span><span>UI/UX</span><span>Thesis</span><span>Email API</span></div>
             <button type="button" class="more" aria-expanded="false">what I built <i>▾</i></button>
             <div class="win-more"><div>
               <ul>
-                <li>Email API integration (Brevo) for forgot-password recovery and registration emails</li>
-                <li>Login, registration, and forgot-password screens with password validation, a show/hide toggle, and a Terms &amp; Conditions prompt</li>
-                <li>Ambagan partial payments, and Favorite Billers with recurring bill reminders</li>
-                <li>An animated splash screen</li>
+                <li>Developed the Brevo email API integration and got it working for forgot-password recovery and registration emails</li>
+                <li>Built the login, registration and forgot-password screens, including password validation, a show/hide toggle and a Terms &amp; Conditions prompt</li>
+                <li>Implemented Ambagan partial payments and Favorite Billers with recurring bill reminders</li>
+                <li>Designed an animated splash screen</li>
               </ul>
             </div></div>
             <p class="status"><i></i> full case study coming soon</p>
@@ -326,7 +338,7 @@
           <div class="win-body">
             <small>Web development course · 2024–2025</small>
             <h3>StayCrafty</h3>
-            <p>A kawaii stationery e-commerce website: an online storefront for browsing products.</p>
+            <p>An e-commerce storefront for kawaii stationery, designed and developed end to end with front-end and web design skills.</p>
             <div class="tags"><span>Web</span><span>E-commerce</span><span>Front-end</span><span>Kawaii</span></div>
             <button type="button" class="more" aria-expanded="false">what I built <i>▾</i></button>
             <div class="win-more"><div>
@@ -359,7 +371,7 @@
           <div class="win-body">
             <small>Social media · Branding</small>
             <h3>kriznbows</h3>
-            <p>My thrift business brand: content, visuals, and community-building on social media from start to finish.</p>
+            <p>My own thrift business brand: I handled content, visuals and community-building on social media from start to finish.</p>
             <div class="tags"><span>Social media</span><span>Branding</span><span>Canva</span></div>
             <p class="status"><i></i> case study coming soon</p>
           </div>
@@ -371,6 +383,7 @@
     <!-- ============ JOURNEY ============ -->
     <section id="journey" class="section reveal" data-duck="scroll! the path draws itself ✿">
       <h2 class="h2 st" style="--i:0"><small class="code">/* 04 */</small> my <em>journey<svg viewBox="0 0 152 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M2 8 Q15 0 30 8 T60 8 T90 8 T120 8 T150 8" /></svg></em></h2>
+      <p class="sec-lead st" style="--i:1">Education, work experience and the communities I'm part of.</p>
       <ol class="path" id="path">
         <li class="stop">
           <span class="node" aria-hidden="true">✿</span>
@@ -453,9 +466,10 @@
           <svg class="deco d-matcha" viewBox="0 0 120 100" aria-hidden="true"><use href="#s-matcha" /></svg>
           <p class="code-line">/* 05 */</p>
           <h2>let's make something <em>pretty</em> <span class="flower">✿</span></h2>
-          <p class="sub">Open to internships, collabs, and creative projects. My inbox is always open.</p>
+          <p class="sub">I'm open to internships, org officer roles, collaborations and creative projects. LinkedIn is the fastest way to reach me, and my CV has the full details.</p>
           <div class="cta">
             <a class="btn magnetic" href="https://www.linkedin.com/in/lapuzkriztenantoinette/" target="_blank" rel="noopener">connect on LinkedIn</a>
+            <a class="btn cv magnetic" href="Lapuz_CV.pdf" download="Krizten-Lapuz-CV.pdf" data-cv>⬇ download CV</a>
           </div>
           <div class="socials">
             <a href="https://github.com/krizxei" target="_blank" rel="noopener">GitHub ↗</a>
@@ -479,6 +493,8 @@
             <button type="button" data-cmd="projects">projects</button>
             <button type="button" data-cmd="links">links</button>
             <button type="button" data-cmd="duck">duck</button>
+            <button type="button" data-cmd="cv">cv</button>
+            <button type="button" data-cmd="play">play</button>
             <button type="button" data-cmd="gamer">gamer</button>
             <button type="button" data-cmd="sudo hire kwiz">sudo hire kwiz</button>
           </div>
@@ -490,8 +506,24 @@
   <footer class="foot">
     <div class="ribbon" aria-hidden="true"><i></i><svg viewBox="0 0 100 70"><use href="#s-bow" /></svg><i></i></div>
     <p>© <span id="year"></span> Krizten Antoinette B. Lapuz · made with 💜 and matcha 🍵</p>
-    <button id="toTop" class="btn ghost small" data-cursor="up we go">↑ restart level</button>
+    <div class="foot-btns"><button type="button" class="btn ghost small" data-play data-cursor="play">🎮 play a mini game</button><button id="toTop" class="btn ghost small" data-cursor="up we go">↑ restart level</button></div>
   </footer>
+
+  <!-- ============ mini game ============ -->
+  <div class="game" id="game" role="dialog" aria-modal="true" aria-label="Catch the matcha mini game" hidden>
+    <div class="game-win">
+      <div class="win-bar"><i></i><i></i><i></i><span>catch-the-matcha.exe</span><button type="button" class="game-x" id="gameX" aria-label="Close game">✕</button></div>
+      <div class="game-hud"><span>SCORE <b id="gScore">0</b></span><span>BEST <b id="gBest">0</b></span><span>TIME <b id="gTime">30</b></span><span id="gLives" aria-label="lives">♥♥♥</span></div>
+      <div class="game-stage">
+        <canvas id="gCanvas" width="420" height="520"></canvas>
+        <div class="game-over" id="gOver">
+          <h3 id="gTitle">catch the matcha!</h3>
+          <p id="gMsg">Move the duck with your mouse, finger or ← → keys. Catch 🍓 🍵 🎀 and dodge the 🐛 bugs.</p>
+          <button type="button" class="btn" id="gStart">▶ start</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============ rubber duck companion ============ -->
   <div class="duck" id="duck">

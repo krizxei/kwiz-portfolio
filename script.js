@@ -37,6 +37,8 @@
     { id: "explorer", ic: "🧭", name: "Explorer", desc: "reach the contact section" },
     { id: "peel", ic: "🍓", name: "Sticker peeler", desc: "click a skill sticker" },
     { id: "player1", ic: "🎮", name: "Player 1 ready", desc: "enter pixel mode (try the Konami code)" },
+    { id: "play", ic: "🕹️", name: "Arcade girl", desc: "play the mini game" },
+    { id: "top", ic: "🏅", name: "High scorer", desc: "score 20+ in the mini game" },
   ];
   let got = {};
   try { got = JSON.parse(sessionStorage.getItem("kwiz-ach") || "{}"); } catch (e) {}
@@ -114,9 +116,22 @@
   applyTheme(savedTheme || "light");
   themeBtn.addEventListener("click", () => {
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    applyTheme(next);
-    if (next === "dark") unlock("owl");
-    try { localStorage.setItem("kwiz-theme", next); } catch (e) {}
+    const done = () => {
+      applyTheme(next);
+      if (next === "dark") unlock("owl");
+      try { localStorage.setItem("kwiz-theme", next); } catch (e) {}
+    };
+    if (!document.startViewTransition || reduce) { done(); return; }
+    const r = themeBtn.getBoundingClientRect();
+    const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const vt = document.startViewTransition(done);
+    vt.ready.then(() => {
+      root.animate(
+        { clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + end + "px at " + x + "px " + y + "px)"] },
+        { duration: 750, easing: "cubic-bezier(.2,.8,.2,1)", pseudoElement: "::view-transition-new(root)" }
+      );
+    }).catch(() => {});
   });
 
   /* ---------- boot intro ---------- */
@@ -164,7 +179,7 @@
   boot();
 
   /* ---------- typing rotator ---------- */
-  const words = ["UI/UX designer", "web & app developer", "data girlie", "gamer at heart", "pastel enthusiast", "thesis survivor"];
+  const words = ["UI/UX designer", "web & mobile app developer", "front-end developer", "brand & graphic designer", "IT & e-commerce coordinator"];
   const typed = $("#typed");
   let wi = 0, ci = 0, deleting = false;
   function type() {
@@ -561,6 +576,12 @@
     lastScrollY = scrollY;
     vel = lerp(vel, dy, 0.18);
 
+    // spotlight follows the cursor
+    if (spot && fine && !reduce) {
+      root.style.setProperty("--sx", rx.toFixed(0) + "px");
+      root.style.setProperty("--sy", ry.toFixed(0) + "px");
+    }
+
     // cursor ring
     if (ring) {
       rx = lerp(rx, mouse.x, 0.2);
@@ -636,7 +657,7 @@
   const COMMANDS = {
     help: () => [
       "commands:  about · skills · projects · experience · journey · links · whoami · ls · duck · clear",
-      "fun:       gamer · achievements · matcha · strawberry",
+      "more:      cv · play · gamer · achievements · matcha · strawberry",
       ["secret:    try ", "sudo hire kwiz", " ✿"],
     ],
     about: () => [
@@ -680,6 +701,8 @@
       return on ? ["player 1 ready ▮ pixel mode ON", "type 'gamer' again to go back to pastel."] : ["pixel mode off ✿ welcome back."];
     },
     achievements: () => ACH.map((a) => (got[a.id] ? "[x] " + a.name : "[ ] ??? — " + a.desc)),
+    cv: () => [["my CV: ", L("Lapuz_CV.pdf", "Lapuz_CV.pdf ⬇")]],
+    play: () => { setTimeout(() => window.__openGame && window.__openGame($("#termInput")), 200); return ["loading catch-the-matcha.exe …"]; },
     matcha: () => ["🍵 matcha level: 100%", "status: fueled. ready to ship."],
     strawberry: () => ["🍓 strawberries loaded.", "bug count: 0 (probably)."],
     hello: () => ["hi hi! ✿ type 'help' to see what I can do."],
@@ -728,6 +751,190 @@
   });
   $$(".term-chips button").forEach((b) => b.addEventListener("click", () => run(b.dataset.cmd)));
   $("#term").addEventListener("click", (e) => { if (!e.target.closest("button,a") && fine) input.focus({ preventScroll: true }); });
+
+  /* ---------- confetti ---------- */
+  function confetti(x, y) {
+    const chars = ["🍓", "🎀", "🍵", "✿", "✦", "♡", "🌸"];
+    for (let i = 0; i < 26; i++) {
+      const s = document.createElement("span");
+      s.className = "spark";
+      s.textContent = chars[i % chars.length];
+      s.style.left = x + "px";
+      s.style.top = y + "px";
+      s.style.fontSize = 14 + Math.random() * 14 + "px";
+      s.style.setProperty("--dx", (Math.random() - 0.5) * 420 + "px");
+      s.style.setProperty("--dy", (Math.random() - 0.7) * 320 + "px");
+      s.style.setProperty("--r", (Math.random() - 0.5) * 720 + "deg");
+      s.style.animationDuration = 1.2 + Math.random() * 0.6 + "s";
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 1900);
+    }
+  }
+  $$("[data-cv]").forEach((a) => a.addEventListener("click", (e) => {
+    confetti(e.clientX, e.clientY);
+    toast("📄", "CV on its way", "thank you for taking a look ✿");
+  }));
+
+  /* ---------- stat counters ---------- */
+  function countUp(el) {
+    const target = +el.dataset.count;
+    if (reduce) { el.textContent = target; return; }
+    const t0 = performance.now(), dur = 1400;
+    const tick = (t) => {
+      const k = clamp((t - t0) / dur, 0, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+  const cio = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); } }), { threshold: 0.6 });
+  $$("[data-count]").forEach((el) => cio.observe(el));
+
+  /* ---------- mini game: catch the matcha ---------- */
+  const game = $("#game"), cv = $("#gCanvas");
+  if (game && cv) {
+    const ctx = cv.getContext("2d");
+    const W = cv.width, H = cv.height;
+    const gOver = $("#gOver"), gTitle = $("#gTitle"), gMsg = $("#gMsg"), gStart = $("#gStart");
+    const gScore = $("#gScore"), gBest = $("#gBest"), gTime = $("#gTime"), gLives = $("#gLives");
+    const duckSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 110"><path d="M14 66 L2 52 L30 58 Z" fill="#f7cf4a" stroke="#c99a1b" stroke-width="4" stroke-linejoin="round"/><ellipse cx="56" cy="74" rx="42" ry="28" fill="#f7cf4a" stroke="#c99a1b" stroke-width="4"/><circle cx="88" cy="40" r="23" fill="#f7cf4a" stroke="#c99a1b" stroke-width="4"/><path d="M106 40 q20 1 18 9 q-10 6 -20 -1 z" fill="#f08a3c" stroke="#c9692a" stroke-width="3" stroke-linejoin="round"/><circle cx="92" cy="35" r="3.4" fill="#2b1a2e"/><ellipse cx="98" cy="47" rx="5" ry="3" fill="#ff9fb8" opacity=".75"/><path d="M34 72 q16 -16 34 0 q-12 16 -34 0z" fill="#f2bf30" stroke="#c99a1b" stroke-width="3.5" stroke-linejoin="round"/><path d="M74 22 l-12 -8 v16 z M74 22 l12 -8 v16 z" fill="#f48fc3" stroke="#b9487f" stroke-width="3" stroke-linejoin="round"/><circle cx="74" cy="22" r="4" fill="#f48fc3" stroke="#b9487f" stroke-width="3"/></svg>';
+    const duckImg = new Image();
+    duckImg.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(duckSvg);
+    const KINDS = [
+      { e: "🍓", pts: 1, w: 4 }, { e: "🍵", pts: 2, w: 2 }, { e: "🎀", pts: 1, w: 3 }, { e: "🐛", pts: 0, w: 3, bad: true },
+    ];
+    const pick = () => {
+      let r = Math.random() * KINDS.reduce((a, k) => a + k.w, 0);
+      for (const k of KINDS) { if ((r -= k.w) < 0) return k; }
+      return KINDS[0];
+    };
+    let best = 0;
+    try { best = +sessionStorage.getItem("kwiz-best") || 0; } catch (e) {}
+    gBest.textContent = best;
+    let st = null, raf = 0, opener = null;
+    const keys = {};
+    const pl = { x: W / 2, w: 74, h: 64, tx: W / 2 };
+
+    function setLives(n) { gLives.textContent = "♥".repeat(Math.max(0, n)) + "♡".repeat(Math.max(0, 3 - n)); }
+    function reset() {
+      st = { score: 0, time: 30, lives: 3, items: [], spawn: 0, last: performance.now(), run: true, pops: [] };
+      pl.x = pl.tx = W / 2;
+      gScore.textContent = 0; gTime.textContent = 30; setLives(3);
+    }
+    function end(msg) {
+      st.run = false;
+      const sc = st.score;
+      const isBest = sc > best;
+      if (isBest) { best = sc; gBest.textContent = best; try { sessionStorage.setItem("kwiz-best", best); } catch (e) {} }
+      if (sc >= 20) unlock("top");
+      gTitle.textContent = sc >= 20 ? "legendary! 👑" : sc >= 10 ? "nice catch ✿" : "good try!";
+      gMsg.textContent = msg + " You scored " + sc + (isBest && sc > 0 ? " (new best!)" : "") + ". Play again?";
+      gStart.textContent = "↻ play again";
+      gOver.classList.remove("hide");
+      if (sc >= 10) { const r = cv.getBoundingClientRect(); confetti(r.left + r.width / 2, r.top + r.height / 2); }
+    }
+    function loop(now) {
+      raf = requestAnimationFrame(loop);
+      ctx.clearRect(0, 0, W, H);
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, "#ffe3f1"); g.addColorStop(1, "#e3d4ff");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = "rgba(240,150,190,.25)"; ctx.lineWidth = 1;
+      for (let x = 0; x < W; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 0; y < H; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      if (!st) return;
+      const dt = Math.min(0.05, (now - st.last) / 1000);
+      st.last = now;
+      if (st.run) {
+        st.time -= dt;
+        if (keys.ArrowLeft || keys.a) pl.tx -= 380 * dt;
+        if (keys.ArrowRight || keys.d) pl.tx += 380 * dt;
+        pl.tx = clamp(pl.tx, pl.w / 2, W - pl.w / 2);
+        pl.x = lerp(pl.x, pl.tx, 0.35);
+        st.spawn -= dt;
+        const elapsed = 30 - st.time;
+        if (st.spawn <= 0) {
+          st.spawn = Math.max(0.28, 0.75 - elapsed * 0.014);
+          const k = pick();
+          st.items.push({ k, x: 24 + Math.random() * (W - 48), y: -30, vy: 150 + elapsed * 5 + Math.random() * 60, rot: (Math.random() - 0.5) * 2 });
+        }
+        st.items.forEach((it) => { it.y += it.vy * dt; it.rot += dt * 2; });
+        st.items = st.items.filter((it) => {
+          const hit = Math.abs(it.x - pl.x) < pl.w / 2 + 6 && it.y > H - pl.h - 16 && it.y < H - 10;
+          if (hit) {
+            if (it.k.bad) { st.lives--; setLives(st.lives); st.pops.push({ x: it.x, y: it.y, t: "ouch!", life: 0.7, c: "#d96a80" }); }
+            else { st.score += it.k.pts; gScore.textContent = st.score; st.pops.push({ x: it.x, y: it.y, t: "+" + it.k.pts, life: 0.7, c: "#6aa05f" }); }
+            return false;
+          }
+          return it.y < H + 40;
+        });
+        gTime.textContent = Math.max(0, Math.ceil(st.time));
+        if (st.lives <= 0) end("Too many bugs! 🐛");
+        else if (st.time <= 0) end("Time's up!");
+      }
+      ctx.font = "34px system-ui, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif";
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      st.items.forEach((it) => {
+        ctx.save(); ctx.translate(it.x, it.y); ctx.rotate(Math.sin(it.rot) * 0.4);
+        ctx.fillText(it.k.e, 0, 0); ctx.restore();
+      });
+      if (duckImg.complete) ctx.drawImage(duckImg, pl.x - pl.w / 2, H - pl.h - 10 + Math.sin(now / 160) * 2, pl.w, pl.h);
+      ctx.font = "700 20px 'Caveat', cursive";
+      st.pops = st.pops.filter((p) => (p.life -= dt) > 0);
+      st.pops.forEach((p) => { ctx.globalAlpha = Math.min(1, p.life * 2); ctx.fillStyle = p.c; ctx.fillText(p.t, p.x, p.y - (0.7 - p.life) * 60); });
+      ctx.globalAlpha = 1;
+    }
+    function start() {
+      reset();
+      gOver.classList.add("hide");
+      unlock("play");
+    }
+    function openGame(from) {
+      opener = from || null;
+      game.hidden = false;
+      root.classList.add("gaming");
+      st = null;
+      gTitle.textContent = "catch the matcha!";
+      gMsg.textContent = "Move the duck with your mouse, finger or ← → keys. Catch 🍓 🍵 🎀 and dodge the 🐛 bugs.";
+      gStart.textContent = "▶ start";
+      gOver.classList.remove("hide");
+      gScore.textContent = 0; gTime.textContent = 30; setLives(3);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame((t) => { if (st) st.last = t; loop(t); });
+      gStart.focus({ preventScroll: true });
+      if (hud) { hud.classList.remove("open"); hudBtn.setAttribute("aria-expanded", false); }
+    }
+    function closeGame() {
+      game.hidden = true;
+      root.classList.remove("gaming");
+      cancelAnimationFrame(raf);
+      st = null;
+      if (opener && opener.focus) opener.focus({ preventScroll: true });
+    }
+    window.__openGame = openGame;
+    $$("[data-play]").forEach((b) => b.addEventListener("click", () => openGame(b)));
+    $("#gameX").addEventListener("click", closeGame);
+    game.addEventListener("click", (e) => { if (e.target === game) closeGame(); });
+    gStart.addEventListener("click", start);
+    cv.addEventListener("pointermove", (e) => {
+      const r = cv.getBoundingClientRect();
+      pl.tx = ((e.clientX - r.left) / r.width) * W;
+    });
+    cv.addEventListener("pointerdown", (e) => {
+      const r = cv.getBoundingClientRect();
+      pl.tx = ((e.clientX - r.left) / r.width) * W;
+    });
+    document.addEventListener("keydown", (e) => {
+      if (game.hidden) return;
+      if (e.key === "Escape") { closeGame(); return; }
+      keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = true;
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") e.preventDefault();
+    });
+    document.addEventListener("keyup", (e) => { keys[e.key.length === 1 ? e.key.toLowerCase() : e.key] = false; });
+  }
+
+  /* ---------- cursor spotlight (shines in night mode) ---------- */
+  const spot = $(".spot");
 
   /* ---------- footer ---------- */
   $("#year").textContent = new Date().getFullYear();
