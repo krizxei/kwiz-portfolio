@@ -12,6 +12,94 @@
   const root = document.documentElement;
   const mouse = { x: innerWidth / 2, y: innerHeight / 2, has: false };
 
+  /* ---------- toasts + achievements (the gamer side) ---------- */
+  const toasts = $("#toasts");
+  function toast(icon, title, sub) {
+    if (!toasts) return;
+    const t = document.createElement("div");
+    t.className = "toast";
+    t.innerHTML = '<span class="t-ic"></span><div><b></b><span></span></div>';
+    $(".t-ic", t).textContent = icon;
+    $("b", t).textContent = title;
+    $("div > span", t).textContent = sub || "";
+    toasts.appendChild(t);
+    while (toasts.children.length > 3) toasts.firstChild.remove();
+    setTimeout(() => t.classList.add("out"), 4200);
+    setTimeout(() => t.remove(), 4800);
+  }
+  const ACH = [
+    { id: "quack", ic: "🦆", name: "First quack", desc: "poke the rubber duck" },
+    { id: "throw", ic: "🎯", name: "Sticker thrower", desc: "fling a sticker across the hero" },
+    { id: "hacker", ic: "💻", name: "Hacker girl", desc: "run a command in the terminal" },
+    { id: "owl", ic: "🌙", name: "Night owl", desc: "switch on night mode" },
+    { id: "holo", ic: "✨", name: "Holo hunter", desc: "tilt the GWB card" },
+    { id: "rain", ic: "🌸", name: "Flower rain", desc: "click the name 5 times" },
+    { id: "explorer", ic: "🧭", name: "Explorer", desc: "reach the contact section" },
+    { id: "peel", ic: "🍓", name: "Sticker peeler", desc: "click a skill sticker" },
+    { id: "player1", ic: "🎮", name: "Player 1 ready", desc: "enter pixel mode (try the Konami code)" },
+  ];
+  let got = {};
+  try { got = JSON.parse(sessionStorage.getItem("kwiz-ach") || "{}"); } catch (e) {}
+  const achList = $("#achList");
+  function renderAch() {
+    if (!achList) return;
+    achList.innerHTML = "";
+    ACH.forEach((a) => {
+      const li = document.createElement("li");
+      li.className = got[a.id] ? "got" : "";
+      li.innerHTML = '<span class="ach-ic"></span><div><b></b><small></small></div>';
+      $(".ach-ic", li).textContent = got[a.id] ? a.ic : "🔒";
+      $("b", li).textContent = got[a.id] ? a.name : "???";
+      $("small", li).textContent = a.desc;
+      achList.appendChild(li);
+    });
+    const n = Object.keys(got).length;
+    $("#achCount").textContent = n;
+    $("#achTotal").textContent = ACH.length;
+  }
+  function unlock(id) {
+    if (got[id]) return;
+    const a = ACH.find((x) => x.id === id);
+    if (!a) return;
+    got[id] = 1;
+    try { sessionStorage.setItem("kwiz-ach", JSON.stringify(got)); } catch (e) {}
+    renderAch();
+    toast(a.ic, "achievement unlocked", a.name);
+    const tr = $(".trophy");
+    if (tr) { tr.classList.remove("pop"); void tr.offsetWidth; tr.classList.add("pop"); }
+    if (Object.keys(got).length === ACH.length) setTimeout(() => toast("👑", "all achievements!", "you found everything ✿"), 900);
+  }
+  renderAch();
+  const hud = $("#hud"), hudBtn = $("#hudBtn");
+  if (hud && hudBtn) {
+    hudBtn.addEventListener("click", () => {
+      const open = hud.classList.toggle("open");
+      hudBtn.setAttribute("aria-expanded", open);
+    });
+    document.addEventListener("click", (e) => {
+      if (hud.classList.contains("open") && !e.target.closest("#hud")) { hud.classList.remove("open"); hudBtn.setAttribute("aria-expanded", false); }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") { hud.classList.remove("open"); hudBtn.setAttribute("aria-expanded", false); }
+    });
+  }
+
+  /* ---------- pixel mode (konami code or `gamer` in the terminal) ---------- */
+  function setPixel(on) {
+    root.classList.toggle("pixel", on);
+    if (on) { unlock("player1"); toast("🎮", "pixel mode ON", "player 1 ready · press START"); }
+    else toast("🌸", "pixel mode off", "back to pastel");
+    return on;
+  }
+  const konami = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"];
+  let kpos = 0;
+  document.addEventListener("keydown", (e) => {
+    if (e.target && e.target.tagName === "INPUT") return;
+    const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    kpos = k === konami[kpos] ? kpos + 1 : k === konami[0] ? 1 : 0;
+    if (kpos === konami.length) { kpos = 0; setPixel(!root.classList.contains("pixel")); }
+  });
+
   /* ---------- theme ---------- */
   const themeBtn = $("#theme");
   function applyTheme(t) {
@@ -27,6 +115,7 @@
   themeBtn.addEventListener("click", () => {
     const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     applyTheme(next);
+    if (next === "dark") unlock("owl");
     try { localStorage.setItem("kwiz-theme", next); } catch (e) {}
   });
 
@@ -75,7 +164,7 @@
   boot();
 
   /* ---------- typing rotator ---------- */
-  const words = ["UI/UX designer", "web & app developer", "data girlie", "pastel enthusiast", "thesis survivor"];
+  const words = ["UI/UX designer", "web & app developer", "data girlie", "gamer at heart", "pastel enthusiast", "thesis survivor"];
   const typed = $("#typed");
   let wi = 0, ci = 0, deleting = false;
   function type() {
@@ -95,9 +184,10 @@
     const txt = nameWord.textContent.trim();
     nameWord.textContent = "";
     nameWord.setAttribute("aria-label", txt);
-    [...txt].forEach((c) => {
+    [...txt].forEach((c, i) => {
       const s = document.createElement("span");
       s.className = "ch";
+      s.style.setProperty("--k", i);
       s.textContent = c;
       s.setAttribute("aria-hidden", "true");
       nameWord.appendChild(s);
@@ -115,8 +205,9 @@
     if (nameClicks >= 5) { nameClicks = 0; petals(); say("flower rain! ✿✿✿"); }
   });
   function petals() {
-    const chars = ["✿", "❀", "🌸", "💗", "✦"];
-    for (let i = 0; i < 26; i++) {
+    unlock("rain");
+    const chars = ["✿", "❀", "🌸", "💗", "🍓", "🎀", "🍵", "✦"];
+    for (let i = 0; i < 28; i++) {
       const p = document.createElement("span");
       p.className = "petal";
       p.textContent = chars[i % chars.length];
@@ -169,11 +260,19 @@
     stops.forEach((s) => s.classList.toggle("on", s.getBoundingClientRect().top < innerHeight * 0.72));
   }
 
+  const xpFill = $("#xpFill"), xpTxt = $("#xpTxt");
+  let questDone = false;
   let ticking = false;
   function onScroll() {
     ticking = false;
     const max = root.scrollHeight - innerHeight;
-    progressEl.style.width = (max > 0 ? (scrollY / max) * 100 : 0) + "%";
+    const pct = max > 0 ? clamp((scrollY / max) * 100, 0, 100) : 0;
+    progressEl.style.width = pct + "%";
+    if (xpFill) {
+      xpFill.style.width = pct + "%";
+      xpTxt.textContent = pct >= 99 ? "MAX" : Math.floor(pct) + "%";
+      if (pct >= 99 && !questDone) { questDone = true; toast("🏁", "quest complete", "you scrolled the whole portfolio ✿"); }
+    }
     let cur = -1;
     secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top < innerHeight * 0.45) cur = i; });
     setActive(cur);
@@ -208,7 +307,7 @@
       if (!e.relatedTarget) { dot.style.opacity = ring.style.opacity = label.style.opacity = 0; }
     });
   }
-  const sparkChars = ["✿", "✦", "♡", "✧", "❀"];
+  const sparkChars = ["✿", "✦", "♡", "✧", "❀", "🍓", "🎀"];
   let lastSpark = 0;
   function spawnSpark(x, y, burst) {
     const s = document.createElement("span");
@@ -237,9 +336,11 @@
   if (!reduce) addEventListener("click", (e) => { for (let i = 0; i < 9; i++) spawnSpark(e.clientX, e.clientY, true); });
 
   /* ---------- tilt + holo (hero card, project windows) ---------- */
-  function tilt(el, max) {
+  function tilt(el, max, onFirst) {
+    let fired = false;
     el.addEventListener("pointermove", (e) => {
       if (e.pointerType === "touch") return;
+      if (!fired && onFirst) { fired = true; onFirst(); }
       const r = el.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
       el.style.setProperty("--ry", ((px - 0.5) * max * 2).toFixed(2) + "deg");
@@ -256,8 +357,10 @@
   }
   if (!reduce) {
     const holo = $("#holo");
-    if (holo) tilt(holo, 14);
+    if (holo) tilt(holo, 14, () => unlock("holo"));
     $$(".win").forEach((w) => tilt(w, 7));
+    const idc = $("#idcard");
+    if (idc) tilt(idc, 6);
   }
 
   /* ---------- magnetic buttons ---------- */
@@ -272,12 +375,23 @@
   }
 
   /* ---------- skill stickers: click = bounce + sparkles ---------- */
+  $$(".chips").forEach((g) => [...g.children].forEach((c, i) => c.style.setProperty("--k", i)));
   $$(".chips span").forEach((c) => {
     c.addEventListener("click", (e) => {
+      unlock("peel");
       c.classList.remove("bounce");
       void c.offsetWidth;
       c.classList.add("bounce");
       for (let i = 0; i < 6; i++) spawnSpark(e.clientX, e.clientY, true);
+    });
+  });
+
+  /* ---------- "what I built" accordions ---------- */
+  $$(".win .more").forEach((b) => {
+    b.addEventListener("click", () => {
+      const w = b.closest(".win");
+      const open = w.classList.toggle("open");
+      b.setAttribute("aria-expanded", open);
     });
   });
 
@@ -344,6 +458,7 @@
       dragging = false;
       el.classList.remove("dragging");
       el.style.rotate = el._r + "deg";
+      if (Math.hypot(vx, vy) > 9) unlock("throw");
       if (reduce) return;
       const step = () => {
         let [x, y, mx, my] = [el.offsetLeft + vx, el.offsetTop + vy, 0, 0];
@@ -408,8 +523,9 @@
       o.start(t); o.stop(t + 0.22);
     } catch (e) {}
   }
-  const duckLines = ["quack!", "explain your bug to me ✿", "have you tried turning it off and on again?", "it's always a missing semicolon ;", "console.log('quack')", "i believe in your code 💗"];
+  const duckLines = ["quack!", "explain your bug to me ✿", "have you tried turning it off and on again?", "it's always a missing semicolon ;", "console.log('quack')", "i believe in your code 💗", "gg ez ✿", "have you drunk your matcha today? 🍵", "press START to continue 🎮", "strawberries fix everything 🍓"];
   function pokeDuck(e) {
+    unlock("quack");
     quack();
     duckBody.classList.remove("hop");
     void duckBody.offsetWidth;
@@ -431,6 +547,11 @@
     { threshold: 0.45 }
   );
   $$("[data-duck]").forEach((s) => duckIO.observe(s));
+  const contactSec = $("#contact");
+  if (contactSec) {
+    const exIO = new IntersectionObserver((en) => en.forEach((e) => { if (e.isIntersecting) { unlock("explorer"); exIO.disconnect(); } }), { threshold: 0.35 });
+    exIO.observe(contactSec);
+  }
 
   /* ---------- one animation loop for everything that moves ---------- */
   let lastScrollY = scrollY, vel = 0;
@@ -514,28 +635,39 @@
   const L = (href, text) => ({ href, text });
   const COMMANDS = {
     help: () => [
-      "commands:  about · skills · projects · journey · links · whoami · ls · duck · clear",
+      "commands:  about · skills · projects · experience · journey · links · whoami · ls · duck · clear",
+      "fun:       gamer · achievements · matcha · strawberry",
       ["secret:    try ", "sudo hire kwiz", " ✿"],
     ],
-    about: () => ["Krizten Antoinette B. Lapuz — 4th-year BSIT @ TUP Manila.", "I build web & mobile apps, design in Figma, and I'm finishing my thesis."],
-    whoami: () => ["kwiz ✿  (a.k.a. Krizten Antoinette B. Lapuz)"],
+    about: () => [
+      "Krizten Antoinette B. Lapuz — 4th-year BSIT @ TUP Manila.",
+      "Started in graphic design, social media & journalism, grew into web and mobile app development.",
+      "Currently building MySalapi, my thesis.",
+    ],
+    whoami: () => ["kwiz ✿  (a.k.a. Krizten Antoinette B. Lapuz) · player 1 · LVL 4"],
     skills: () => [
-      "build        web dev · app dev · HTML/CSS/JS · Android · GitHub",
-      "design       UI/UX · Figma · Canva · graphic design · branding",
-      "communicate  journalism · social media · content writing · e-commerce",
-      "tools        Google Workspace · Microsoft 365",
+      "development  web dev · app dev · React Native · Laravel · Git & GitHub · HTML/CSS/JS · Android · IT support",
+      "design       Figma (UI/UX) · Canva · visual branding · social media graphics",
+      "comms        Facebook · Instagram · TikTok · content planning · journalism · report writing",
+      "productivity Google Workspace · Microsoft Office · data entry",
+      "soft         critical thinking · attention to detail · multitasking · adaptability",
     ],
     projects: () => [
-      "1. MySalapi    thesis · Android finance app",
-      "2. StayCrafty  web development course site",
+      "1. MySalapi    thesis · Android finance app (2026-2027)",
+      "2. StayCrafty  kawaii stationery e-commerce site (2024-2025)",
       "3. Kita-Kita   sari-sari store app concept",
       "4. kriznbows   thrift brand & socials",
     ],
     ls: () => ["mysalapi.app   staycrafty.html   kita-kita.plan   kriznbows.brand"],
+    experience: () => [
+      "Aug 2024 - Jan 2026  IT & E-Commerce Coordinator @ LJ Farm Supply & General Merchandise",
+      "                     social media · Canva promo graphics · listings, inquiries & orders",
+    ],
     journey: () => [
       "now     Girls Who Build PH · Google Developer Campus TUP Manila · 4th-year BSIT",
-      "before  IT & E-Commerce Coordinator @ LJ Farm Supply & General Merchandize",
-      "2023-24 COMPASS   ·   2022-23 TUPGEAR",
+      "event   handled a seminar: Building Generative AI-Powered Applications in Java",
+      "before  IT & E-Commerce Coordinator @ LJ Farm Supply & General Merchandise",
+      "2023-24 TUPCOMPASS   ·   2022-23 TUPGEAR   ·   2020-22 SHS STEM @ Metro Manila College",
     ],
     links: () => [
       [L("https://github.com/krizxei", "github.com/krizxei")],
@@ -543,6 +675,13 @@
       [L("https://www.instagram.com/kwiztenn/", "instagram.com/kwiztenn")],
       [L("https://www.facebook.com/kriztenantoinette.lapuz", "facebook.com/kriztenantoinette.lapuz")],
     ],
+    gamer: () => {
+      const on = setPixel(!root.classList.contains("pixel"));
+      return on ? ["player 1 ready ▮ pixel mode ON", "type 'gamer' again to go back to pastel."] : ["pixel mode off ✿ welcome back."];
+    },
+    achievements: () => ACH.map((a) => (got[a.id] ? "[x] " + a.name : "[ ] ??? — " + a.desc)),
+    matcha: () => ["🍵 matcha level: 100%", "status: fueled. ready to ship."],
+    strawberry: () => ["🍓 strawberries loaded.", "bug count: 0 (probably)."],
     hello: () => ["hi hi! ✿ type 'help' to see what I can do."],
     date: () => [new Date().toDateString()],
     exit: () => ["you can't leave. the duck is watching. 🦆"],
@@ -562,13 +701,14 @@
     $(".t-cmd", echo).textContent = raw;
     body.appendChild(echo);
     if (!cmd) return;
+    unlock("hacker");
     if (cmd === "clear") { body.innerHTML = ""; return; }
     const fn = COMMANDS[cmd];
     if (!fn) { line("command not found: " + cmd + " — try 'help'", "t-dim"); return; }
     const out = fn();
     out.forEach((ln, i) => {
       if (cmd === "sudo hire kwiz") line(ln, "t-ok");
-      else if (cmd === "help" && i === 1) line(["secret:    try ", "sudo hire kwiz", " ✿"], "t-dim");
+      else if (cmd === "help" && i >= 1) line(ln, "t-dim");
       else line(ln, "t-out");
     });
   }

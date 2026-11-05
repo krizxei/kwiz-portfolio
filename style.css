@@ -591,3 +591,219 @@ mark {
   .h2 em svg path { stroke-dashoffset: 0 !important; }
 }
 .nojs-fallback .pop, .nojs-fallback .sticker, .nojs-fallback .reveal .st { opacity: 1 !important; translate: none !important; animation: none !important; }
+
+/* =====================================================
+   v3 additions: gamer HUD, achievements, ID card, matcha/strawberry
+   ===================================================== */
+.c-matcha { background: var(--matcha2); }
+
+/* background svg doodles */
+.doodles b.svgd { font-size: 0; opacity: 0.5; animation: drift 9s ease-in-out infinite; }
+.doodles b.svgd svg { display: block; filter: drop-shadow(0 4px 6px rgba(120, 80, 180, 0.25)); }
+[data-theme="dark"] .doodles b.svgd { opacity: 0.35; }
+
+/* rising floaties in the hero */
+.floaties { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.floaties svg {
+  position: absolute; left: var(--x); bottom: -50px; width: var(--s); height: var(--s); opacity: 0.6;
+  animation: rise var(--d) linear var(--dl) infinite; will-change: transform;
+}
+@keyframes rise {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(26px, -60vh, 0) rotate(180deg); }
+  100% { transform: translate3d(-10px, -125vh, 0) rotate(360deg); }
+}
+
+/* hero name letters drop in, card shine */
+.ready .ch { animation: chDrop 0.9s var(--ease) backwards; animation-delay: calc(var(--k, 0) * 110ms + 450ms); }
+@keyframes chDrop { from { transform: translateY(-70px) scale(0.5) rotate(-12deg); opacity: 0; } }
+.shine {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(110deg, transparent 40%, rgba(255, 255, 255, 0.6) 50%, transparent 60%);
+  background-size: 260% 100%; background-position: 160% 0; animation: shine 6s ease-in-out 2.5s infinite;
+}
+@keyframes shine { 0%, 55% { background-position: 160% 0; } 100% { background-position: -60% 0; } }
+
+/* skill chips pop in one by one */
+.js .reveal .chips span { opacity: 0; scale: 0.5; }
+.js .reveal.in .chips span {
+  opacity: 1; scale: 1;
+  transition: transform 0.3s var(--ease), opacity 0.5s, scale 0.7s cubic-bezier(0.3, 1.7, 0.5, 1);
+  transition-delay: 0s, calc(var(--k, 0) * 70ms + 450ms), calc(var(--k, 0) * 70ms + 450ms);
+}
+
+/* about: notebook extras + ID card */
+.about-left { display: grid; gap: 40px; }
+.bookmark {
+  position: absolute; top: -4px; right: 70px; width: 26px; height: 74px; transform-origin: top; z-index: 2;
+  background: linear-gradient(180deg, var(--pink), var(--coral)); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+  animation: dangle 4s ease-in-out infinite;
+}
+@keyframes dangle { 50% { transform: rotate(4deg); } }
+.nb-bow {
+  position: absolute; top: -20px; right: -14px; width: 74px; height: 52px; rotate: 14deg; z-index: 2;
+  filter: drop-shadow(0 6px 6px rgba(120, 80, 180, 0.3)); transition: rotate 0.4s var(--ease);
+}
+.notebook:hover .nb-bow { rotate: -6deg; }
+
+.idcard {
+  --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
+  position: relative; max-width: 460px; width: 100%; margin: 6px auto 0 0; padding: 0 22px 18px;
+  background: var(--win-bg); color: var(--win-ink); border: 2.5px solid var(--win-line); border-radius: 18px; box-shadow: 7px 7px 0 var(--pink);
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) rotate(-1.2deg); transition: transform 0.5s var(--ease);
+}
+.idcard.is-tilt { transition: transform 0.08s linear; }
+.idcard .clip {
+  position: absolute; top: -15px; left: 50%; width: 74px; height: 24px; translate: -50% 0; border-radius: 9px;
+  background: var(--lav); border: 2.5px solid var(--win-line); z-index: 2;
+}
+.idcard header {
+  display: flex; align-items: center; justify-content: space-between; margin: 0 -22px 16px; padding: 18px 22px 10px;
+  background: linear-gradient(90deg, var(--pink2), var(--lav2)); border-bottom: 2.5px solid var(--win-line); border-radius: 15px 15px 0 0; color: #3a2152;
+  font: 500 0.85rem "DM Mono", monospace; letter-spacing: 0.14em;
+}
+.chip-lvl { padding: 2px 12px; border-radius: 999px; background: #fff; border: 2px solid #3a2152; font-size: 0.72rem; letter-spacing: 0.06em; }
+.idcard dl { display: grid; gap: 9px; }
+.idcard dl > div { display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: baseline; }
+.idcard dt { font: 500 0.7rem "DM Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); }
+.idcard dd { font-size: 0.95rem; line-height: 1.4; }
+.idcard footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 18px; }
+.barcode {
+  width: 130px; height: 30px;
+  background: repeating-linear-gradient(90deg, var(--win-ink) 0 2px, transparent 2px 4px, var(--win-ink) 4px 5px, transparent 5px 8px, var(--win-ink) 8px 11px, transparent 11px 13px);
+}
+.stamp {
+  rotate: -8deg; padding: 2px 12px; border: 2.5px dashed var(--coral); border-radius: 10px; color: var(--coral);
+  font: 700 1.25rem "Caveat", cursive; white-space: nowrap;
+}
+.js .reveal .stamp { opacity: 0; scale: 2.6; }
+.js .reveal.in .stamp { opacity: 1; scale: 1; transition: opacity 0.2s 1.2s, scale 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) 1.2s; }
+.idcard .glare { background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.55), transparent 50%); }
+.idcard.is-tilt .glare { opacity: 0.8; }
+.id-bow { position: absolute; top: -22px; right: -14px; width: 66px; height: 46px; rotate: 16deg; z-index: 2; filter: drop-shadow(0 5px 5px rgba(120, 80, 180, 0.3)); }
+
+.n5 { background: var(--matcha2); rotate: -2deg; margin-top: 4px; }
+.n6 { background: #ffe3cf; rotate: 3deg; }
+
+/* skills: 3 columns */
+.sheets { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1000px) { .sheets { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .sheets { grid-template-columns: 1fr; } }
+
+/* work: bows in title bars + accordion */
+.bar-bow { margin-left: auto; width: 30px; height: 21px; flex: none; }
+.win:hover .bar-bow { animation: wig 0.7s var(--ease); }
+@keyframes wig { 30% { transform: rotate(-16deg) scale(1.2); } 60% { transform: rotate(10deg); } }
+.more {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 6px 14px; border-radius: 999px; cursor: pointer;
+  border: 2px solid var(--win-line); background: var(--lav2); color: #3a2152; font: 500 0.8rem "DM Mono", monospace;
+  transition: transform 0.2s var(--ease), background 0.2s;
+}
+.more:hover { transform: translateY(-2px); background: var(--pink2); }
+.more i { font-style: normal; display: inline-block; transition: rotate 0.4s var(--ease); }
+.win.open .more i { rotate: 180deg; }
+.win-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease); }
+.win.open .win-more { grid-template-rows: 1fr; }
+.win-more > div { overflow: hidden; min-height: 0; }
+.win-more ul { margin: 0 0 4px 18px; display: grid; gap: 6px; color: var(--muted); font-size: 0.9rem; }
+.win-more + .status { margin-top: 14px; }
+
+/* journey: badges, bullets, walking duck */
+.meta { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.badge { font: 500 0.66rem "DM Mono", monospace; font-style: normal; letter-spacing: 0.06em; padding: 2px 10px; border-radius: 999px; color: #3a2152; }
+.badge.act { background: #ffd3e8; animation: ping2 2s infinite; }
+.badge.side { background: #fff0a8; }
+.badge.done { background: var(--matcha2); color: #2f6a2f; }
+.stop ul.list { margin: 8px 0 0 18px; display: grid; gap: 6px; color: var(--muted); font-size: 0.93rem; }
+.path-player {
+  position: absolute; left: 50%; top: calc(var(--p, 0) * 100%); width: 54px; height: 46px; translate: -50% -50%; z-index: 4;
+  list-style: none; pointer-events: none; transition: top 0.25s linear; animation: bob 1.6s ease-in-out infinite;
+}
+.path-player svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 4px 5px rgba(120, 80, 180, 0.35)); }
+
+/* contact decorations + footer ribbon */
+.cta-card { position: relative; }
+.deco { position: absolute; pointer-events: none; filter: drop-shadow(0 6px 6px rgba(120, 80, 180, 0.3)); animation: bob 5s ease-in-out infinite; }
+.d-straw { width: 62px; height: 68px; top: -28px; right: 26px; rotate: 12deg; }
+.d-matcha { width: 82px; height: 68px; bottom: -26px; right: 30px; rotate: -8deg; animation-delay: -2s; }
+.ribbon { display: flex; align-items: center; justify-content: center; gap: 14px; width: 100%; }
+.ribbon i { width: min(26vw, 140px); height: 4px; border-radius: 4px; background: repeating-linear-gradient(90deg, var(--pink) 0 10px, transparent 10px 16px); }
+.ribbon svg { width: 54px; height: 38px; animation: wig 3.5s ease-in-out infinite; }
+
+/* HUD */
+.hud { position: fixed; top: 86px; right: 16px; z-index: 58; }
+.hud-btn {
+  display: flex; align-items: center; gap: 10px; padding: 7px 14px 7px 12px; border-radius: 999px; cursor: pointer;
+  background: var(--card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--ink);
+  border: 2.5px solid var(--win-line); box-shadow: 4px 4px 0 var(--lav); font: 500 0.74rem "DM Mono", monospace;
+  transition: transform 0.2s var(--ease);
+}
+.hud-btn:hover { transform: translateY(-2px); }
+.lvl { color: var(--coral); font-weight: 500; }
+.xpbar { width: 70px; height: 10px; border-radius: 999px; border: 2px solid var(--win-line); overflow: hidden; }
+.xpbar b { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pink), var(--lav)); }
+.trophy.pop { animation: trophy 0.7s var(--ease); }
+@keyframes trophy { 40% { transform: scale(1.5) rotate(-12deg); } }
+.hud-panel {
+  position: absolute; right: 0; top: calc(100% + 10px); width: 270px; padding: 14px 16px; border-radius: 18px;
+  background: var(--win-bg); color: var(--win-ink); border: 2.5px solid var(--win-line); box-shadow: 6px 6px 0 var(--pink);
+  opacity: 0; visibility: hidden; translate: 0 -8px; pointer-events: none; transition: opacity 0.25s, translate 0.3s var(--ease), visibility 0.25s;
+}
+.hud.open .hud-panel { opacity: 1; visibility: visible; translate: 0 0; pointer-events: auto; }
+.hud-title { font: 500 0.75rem "DM Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); margin-bottom: 10px; }
+.hud-panel ul { list-style: none; display: grid; gap: 9px; }
+.hud-panel li { display: flex; gap: 10px; align-items: center; font-size: 0.86rem; line-height: 1.25; }
+.hud-panel li:not(.got) { opacity: 0.55; }
+.ach-ic { font-size: 1.3rem; width: 28px; text-align: center; flex: none; }
+.hud-panel small { display: block; color: var(--muted); font-size: 0.74rem; }
+.hud-hint { margin-top: 10px; font: 700 1.05rem "Caveat", cursive; color: var(--muted); }
+
+/* toasts */
+.toasts { position: fixed; right: 22px; bottom: 24px; z-index: 9000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast {
+  display: flex; align-items: center; gap: 12px; padding: 10px 18px 10px 14px; border-radius: 16px; background: var(--win-bg); color: var(--win-ink);
+  border: 2.5px solid var(--win-line); box-shadow: 5px 5px 0 var(--matcha); animation: toastIn 0.55s var(--ease) backwards;
+  transition: opacity 0.5s, translate 0.5s;
+}
+.toast.out { opacity: 0; translate: 40px 0; }
+.toast .t-ic { font-size: 1.7rem; }
+.toast b { display: block; font: 500 0.66rem "DM Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); }
+.toast div > span { font-weight: 600; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(60px) scale(0.85); } }
+
+/* pixel mode */
+.scan { position: fixed; inset: 0; z-index: 9000; pointer-events: none; display: none; background: repeating-linear-gradient(transparent 0 2px, rgba(60, 20, 90, 0.07) 2px 3px); }
+html.pixel .scan { display: block; }
+html.pixel body, html.pixel h1, html.pixel h2, html.pixel h3, html.pixel .rotator, html.pixel .logo, html.pixel .name { font-family: "DM Mono", monospace; }
+html.pixel .btn, html.pixel .sheet, html.pixel .win, html.pixel .idcard, html.pixel .chips span, html.pixel .note, html.pixel .cta-card,
+html.pixel .term, html.pixel .hud-btn, html.pixel .stop .card, html.pixel .nav, html.pixel .sticker.lbl, html.pixel .badge, html.pixel .toast { border-radius: 4px !important; }
+html.pixel img, html.pixel svg { image-rendering: pixelated; }
+html.pixel .paper::after { background-size: 16px 16px; }
+html.pixel .blob { display: none; }
+
+/* responsive */
+@media (max-width: 1239px) {
+  .hud { top: auto; bottom: 14px; right: 14px; }
+  .hud .lvl, .hud .xptxt { display: none; }
+  .hud-panel { top: auto; bottom: calc(100% + 10px); }
+  .toasts { top: 78px; bottom: auto; right: auto; left: 50%; translate: -50% 0; width: min(92vw, 340px); }
+}
+@media (max-width: 760px) {
+  .idcard dl > div { grid-template-columns: 78px 1fr; }
+  .path-player { left: 18px; width: 44px; height: 38px; }
+  .d-straw { width: 50px; height: 55px; right: 14px; }
+  .d-matcha { width: 66px; height: 55px; right: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal .chips span, .js .reveal .stamp { opacity: 1 !important; scale: none !important; }
+  .floaties { display: none; }
+}
+.nojs-fallback .chips span, .nojs-fallback .stamp { opacity: 1 !important; scale: none !important; }
+
+/* keep the page from ever getting wider than the phone */
+html { overflow-x: clip; }
+.about-grid > *, .about-left > * { min-width: 0; }
+.idcard footer { flex-wrap: wrap; }
+.js .reveal .stamp { scale: 1.6; }
+@media (max-width: 760px) { .barcode { width: 96px; } .idcard { margin-right: auto; } }
+@media (max-width: 760px) { .bookmark { right: 16px; height: 60px; } .nb-bow { right: -6px; width: 60px; height: 42px; } .notebook .scribble { padding-right: 34px; } }
