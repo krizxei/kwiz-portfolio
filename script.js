@@ -18,10 +18,10 @@
     if (!toasts) return;
     const t = document.createElement("div");
     t.className = "toast";
-    t.innerHTML = '<span class="t-ic"></span><div><b></b><span></span></div>';
+    t.innerHTML = '<span class="t-ic"></span><div class="t-tx"><b></b><span></span></div>';
     $(".t-ic", t).textContent = icon;
     $("b", t).textContent = title;
-    $("div > span", t).textContent = sub || "";
+    $(".t-tx > span", t).textContent = sub || "";
     toasts.appendChild(t);
     while (toasts.children.length > 3) toasts.firstChild.remove();
     setTimeout(() => t.classList.add("out"), 4200);
@@ -58,6 +58,7 @@
     const n = Object.keys(got).length;
     $("#achCount").textContent = n;
     $("#achTotal").textContent = ACH.length;
+    if (typeof applyPerks === "function") applyPerks();
   }
   function unlock(id) {
     if (got[id]) return;
@@ -69,7 +70,37 @@
     toast(a.ic, "achievement unlocked", a.name);
     const tr = $(".trophy");
     if (tr) { tr.classList.remove("pop"); void tr.offsetWidth; tr.classList.add("pop"); }
-    if (Object.keys(got).length === ACH.length) setTimeout(() => toast("👑", "all achievements!", "you found everything ✿"), 900);
+    const n = Object.keys(got).length;
+    const perk = PERKS.find((p) => p.n === n);
+    if (perk) setTimeout(() => toast(perk.ic, "reward unlocked", perk.name), 1100);
+    if (n === ACH.length) setTimeout(() => window.__showReward && window.__showReward(), 2400);
+  }
+  const PERKS = [
+    { n: 4, ic: "🎀", name: "bow cursor trail" },
+    { n: 8, ic: "👑", name: "golden duck" },
+    { n: 11, ic: "🎁", name: "secret gift (CV fast pass)" },
+  ];
+  function applyPerks() {
+    const n = Object.keys(got).length;
+    root.classList.toggle("perk-trail", n >= 4);
+    const d = document.getElementById("duck");
+    if (d) d.classList.toggle("gold", n >= 8);
+    const box = document.getElementById("perks");
+    if (!box) return;
+    box.innerHTML = "";
+    PERKS.forEach((p) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      const ok = n >= p.n;
+      b.className = "perk" + (ok ? " got" : "");
+      b.disabled = !(ok && p.n === 11);
+      b.innerHTML = '<span></span><div><b></b><small></small></div>';
+      $("span", b).textContent = ok ? p.ic : "🔒";
+      $("b", b).textContent = p.name;
+      $("small", b).textContent = ok ? (p.n === 11 ? "tap to open again" : "active") : "unlocks at " + p.n + "/" + ACH.length;
+      if (p.n === 11) b.addEventListener("click", () => window.__showReward && window.__showReward());
+      box.appendChild(b);
+    });
   }
   renderAch();
   const hud = $("#hud"), hudBtn = $("#hudBtn");
@@ -251,11 +282,24 @@
     pill.style.width = a.offsetWidth + "px";
     pill.style.transform = "translateX(" + a.offsetLeft + "px)";
   }
+  const zoneEl = $("#zone");
+  let zoneT, zoneReady = false;
+  setTimeout(() => (zoneReady = true), 2500);
+  function showZone(i) {
+    if (!zoneEl || i < 0 || reduce || !zoneReady) return;
+    zoneEl.textContent = "ZONE 0" + (i + 1) + " · " + navLinks[i].textContent.toUpperCase();
+    zoneEl.classList.remove("show");
+    void zoneEl.offsetWidth;
+    zoneEl.classList.add("show");
+    clearTimeout(zoneT);
+    zoneT = setTimeout(() => zoneEl.classList.remove("show"), 1900);
+  }
   function setActive(i) {
     if (i === activeIdx) return;
     activeIdx = i;
     navLinks.forEach((a, k) => a.classList.toggle("active", k === i));
     movePill();
+    showZone(i);
   }
   const burger = $("#burger");
   burger.addEventListener("click", () => {
@@ -327,7 +371,8 @@
   function spawnSpark(x, y, burst) {
     const s = document.createElement("span");
     s.className = "spark";
-    s.textContent = sparkChars[Math.floor(Math.random() * sparkChars.length)];
+    const set = root.classList.contains("perk-trail") && !burst ? ["🎀", "🎀", "✿", "🎀"] : sparkChars;
+    s.textContent = set[Math.floor(Math.random() * set.length)];
     const spread = burst ? 90 : 28;
     s.style.left = x + "px";
     s.style.top = y + "px";
@@ -587,6 +632,7 @@
       rx = lerp(rx, mouse.x, 0.2);
       ry = lerp(ry, mouse.y, 0.2);
       ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+      if (window.__trail) window.__trail();
     }
 
     // hero letters
@@ -657,13 +703,14 @@
   const COMMANDS = {
     help: () => [
       "commands:  about · skills · projects · experience · journey · links · whoami · ls · duck · clear",
-      "more:      cv · play · gamer · achievements · matcha · strawberry",
+      "more:      cv · play · chess · gamer · achievements · matcha · strawberry",
       ["secret:    try ", "sudo hire kwiz", " ✿"],
     ],
     about: () => [
       "Krizten Antoinette B. Lapuz — 4th-year BSIT @ TUP Manila.",
       "Started in graphic design, social media & journalism, grew into web and mobile app development.",
       "Currently building MySalapi, my thesis.",
+      "Also: TUPM Official Chess Team (joined SCUAA) · WIKA PH pioneer member.",
     ],
     whoami: () => ["kwiz ✿  (a.k.a. Krizten Antoinette B. Lapuz) · player 1 · LVL 4"],
     skills: () => [
@@ -686,6 +733,7 @@
     ],
     journey: () => [
       "now     Girls Who Build PH · Google Developer Campus TUP Manila · 4th-year BSIT",
+      "now     TUPM Official Chess Team (joined SCUAA) · WIKA PH pioneer member",
       "event   handled a seminar: Building Generative AI-Powered Applications in Java",
       "before  IT & E-Commerce Coordinator @ LJ Farm Supply & General Merchandise",
       "2023-24 TUPCOMPASS   ·   2022-23 TUPGEAR   ·   2020-22 SHS STEM @ Metro Manila College",
@@ -701,6 +749,7 @@
       return on ? ["player 1 ready ▮ pixel mode ON", "type 'gamer' again to go back to pastel."] : ["pixel mode off ✿ welcome back."];
     },
     achievements: () => ACH.map((a) => (got[a.id] ? "[x] " + a.name : "[ ] ??? — " + a.desc)),
+    chess: () => ["♟ TUPM Official Chess Team", "joined SCUAA with the team. e4, always."],
     cv: () => [["my CV: ", L("Lapuz_CV.pdf", "Lapuz_CV.pdf ⬇")]],
     play: () => { setTimeout(() => window.__openGame && window.__openGame($("#termInput")), 200); return ["loading catch-the-matcha.exe …"]; },
     matcha: () => ["🍵 matcha level: 100%", "status: fueled. ready to ship."],
@@ -751,6 +800,107 @@
   });
   $$(".term-chips button").forEach((b) => b.addEventListener("click", () => run(b.dataset.cmd)));
   $("#term").addEventListener("click", (e) => { if (!e.target.closest("button,a") && fine) input.focus({ preventScroll: true }); });
+
+  /* ---------- headings: letters spring in ---------- */
+  $$(".h2").forEach((h) => {
+    let j = 0;
+    const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) { const n = walker.currentNode; if (n.textContent.trim() && !n.parentElement.closest(".code, svg")) nodes.push(n); }
+    h.setAttribute("aria-label", h.textContent.replace(/\/\*.*?\*\//, "").replace(/\s+/g, " ").trim());
+    nodes.forEach((n) => {
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+        const w = document.createElement("span");
+        w.className = "hw";
+        w.setAttribute("aria-hidden", "true");
+        [...part].forEach((ch) => {
+          const c = document.createElement("span");
+          c.className = "c";
+          c.style.setProperty("--j", j++);
+          c.textContent = ch;
+          w.appendChild(c);
+        });
+        frag.appendChild(w);
+      });
+      n.replaceWith(frag);
+    });
+  });
+
+  /* ---------- ribbon cursor trail ---------- */
+  if (fine && !reduce) {
+    const tc = document.createElement("canvas");
+    tc.className = "ribbon-trail";
+    tc.setAttribute("aria-hidden", "true");
+    document.body.appendChild(tc);
+    const tctx = tc.getContext("2d");
+    const fit = () => { tc.width = innerWidth; tc.height = innerHeight; };
+    fit();
+    addEventListener("resize", fit);
+    const pts = [];
+    window.__trail = () => {
+      if (!mouse.has) return;
+      pts.unshift({ x: rx, y: ry });
+      if (pts.length > 28) pts.pop();
+      tctx.clearRect(0, 0, tc.width, tc.height);
+      tctx.lineCap = "round";
+      for (let i = 0; i < pts.length - 1; i++) {
+        const k = 1 - i / pts.length;
+        tctx.strokeStyle = "hsla(" + (330 - i * 3.2) + ",85%," + (72 + i * 0.4) + "%," + (0.55 * k) + ")";
+        tctx.lineWidth = 3 + 13 * k;
+        tctx.beginPath();
+        tctx.moveTo(pts[i].x, pts[i].y);
+        tctx.lineTo(pts[i + 1].x, pts[i + 1].y);
+        tctx.stroke();
+      }
+    };
+  }
+
+  /* ---------- reward modal (all achievements) ---------- */
+  const reward = $("#reward");
+  if (reward) {
+    let rwOpener = null;
+    window.__showReward = () => {
+      rwOpener = document.activeElement;
+      reward.hidden = false;
+      root.classList.add("gaming");
+      confetti(innerWidth / 2, innerHeight / 2);
+      setTimeout(() => confetti(innerWidth * 0.3, innerHeight * 0.4), 350);
+      setTimeout(() => confetti(innerWidth * 0.7, innerHeight * 0.4), 700);
+      $("#rwClose").focus({ preventScroll: true });
+    };
+    const closeReward = () => { reward.hidden = true; root.classList.remove("gaming"); if (rwOpener && rwOpener.focus) rwOpener.focus({ preventScroll: true }); };
+    $("#rwClose").addEventListener("click", closeReward);
+    reward.addEventListener("click", (e) => { if (e.target === reward) closeReward(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !reward.hidden) closeReward(); });
+    $("#rwBadge").addEventListener("click", () => {
+      const c = document.createElement("canvas");
+      c.width = 900; c.height = 540;
+      const x = c.getContext("2d");
+      const g = x.createLinearGradient(0, 0, 900, 540);
+      g.addColorStop(0, "#ffc2e2"); g.addColorStop(1, "#c9b3ff");
+      x.fillStyle = g; x.fillRect(0, 0, 900, 540);
+      x.strokeStyle = "rgba(255,255,255,.5)"; x.lineWidth = 1;
+      for (let i = 0; i < 900; i += 36) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 540); x.stroke(); }
+      for (let i = 0; i < 540; i += 36) { x.beginPath(); x.moveTo(0, i); x.lineTo(900, i); x.stroke(); }
+      x.fillStyle = "#fff"; x.strokeStyle = "#3a2152"; x.lineWidth = 6;
+      x.beginPath(); x.roundRect(40, 40, 820, 460, 36); x.fill(); x.stroke();
+      x.textAlign = "center"; x.fillStyle = "#3a2152";
+      x.font = "500 26px monospace"; x.fillText("PLAYER BADGE · LVL 4", 450, 112);
+      x.font = "100px serif"; x.fillText("👑", 450, 215);
+      x.font = "700 64px Georgia, serif"; x.fillStyle = "#d96a80"; x.fillText("Certified Explorer", 450, 305);
+      x.font = "500 28px sans-serif"; x.fillStyle = "#3a2152"; x.fillText("found all " + ACH.length + " secrets in the portfolio of", 450, 357);
+      x.font = "700 40px Georgia, serif"; x.fillText("Krizten Antoinette B. Lapuz", 450, 410);
+      x.font = "500 22px monospace"; x.fillStyle = "#7a6590"; x.fillText("kwiz-portfolio.vercel.app · " + new Date().toDateString(), 450, 462);
+      const a = document.createElement("a");
+      a.download = "kwiz-player-badge.png";
+      a.href = c.toDataURL("image/png");
+      a.click();
+      toast("🏅", "badge saved", "check your downloads ✿");
+    });
+  }
 
   /* ---------- confetti ---------- */
   function confetti(x, y) {

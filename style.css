@@ -768,7 +768,7 @@ mark {
 .toast.out { opacity: 0; translate: 40px 0; }
 .toast .t-ic { font-size: 1.7rem; }
 .toast b { display: block; font: 500 0.66rem "DM Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); }
-.toast div > span { font-weight: 600; }
+.toast .t-tx > span { font-weight: 600; }
 @keyframes toastIn { from { opacity: 0; transform: translateX(60px) scale(0.85); } }
 
 /* pixel mode */
@@ -867,3 +867,76 @@ html.gaming body { overflow: hidden; }
 .game-over p { max-width: 290px; color: var(--muted); font-size: 0.95rem; }
 html.has-cursor .game, html.has-cursor .game button { cursor: auto; }
 html.pixel .game-win { border-radius: 4px; }
+
+/* =====================================================
+   v5: rewards, ribbon trail, zones, letter headings, chess
+   ===================================================== */
+.n7 { background: #e6e0f0; rotate: -2deg; margin-top: 4px; }
+.n8 { background: #ffe0ea; rotate: 2.5deg; }
+
+/* headings: letters spring in */
+.hw { display: inline-block; white-space: nowrap; }
+.js .reveal .h2 .c { display: inline-block; opacity: 0; transform: translateY(0.8em) rotate(10deg) scale(0.6); }
+.js .reveal.in .h2 .c {
+  opacity: 1; transform: none;
+  transition: opacity 0.4s, transform 0.7s cubic-bezier(0.3, 1.7, 0.5, 1);
+  transition-delay: calc(var(--j, 0) * 38ms + 200ms);
+}
+
+/* ribbon trail */
+.ribbon-trail { position: fixed; inset: 0; z-index: 9980; pointer-events: none; }
+html.perk-trail .ribbon-trail { filter: drop-shadow(0 0 6px rgba(255, 143, 199, 0.6)); }
+
+/* zone banner */
+.zone {
+  position: fixed; top: 92px; left: 50%; z-index: 59; translate: -50% -14px; opacity: 0; pointer-events: none;
+  padding: 6px 18px; border-radius: 999px; background: var(--win-bg); color: var(--win-ink); border: 2.5px solid var(--win-line);
+  box-shadow: 4px 4px 0 var(--lav); font: 500 0.78rem "DM Mono", monospace; letter-spacing: 0.14em; white-space: nowrap;
+}
+.zone.show { animation: zoneIn 1.9s var(--ease) forwards; }
+@keyframes zoneIn { 0% { opacity: 0; translate: -50% -14px; scale: 0.8; } 15%, 80% { opacity: 1; translate: -50% 0; scale: 1; } 100% { opacity: 0; translate: -50% -8px; } }
+@media (max-width: 760px) { .zone { top: 82px; font-size: 0.68rem; } }
+
+/* HUD rewards */
+.perk-title { margin-top: 14px; }
+.perks { display: grid; gap: 7px; }
+.perk { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 6px 10px; border-radius: 12px; border: 2px dashed var(--lav); background: transparent; color: inherit; font: inherit; font-size: 0.84rem; cursor: default; opacity: 0.55; }
+.perk.got { opacity: 1; border-style: solid; background: var(--matcha2); color: #1f4d2b; }
+.perk:not(:disabled) { cursor: pointer; }
+.perk span { font-size: 1.2rem; width: 26px; text-align: center; }
+.perk b { display: block; font-weight: 600; line-height: 1.2; }
+.perk small { display: block; font-size: 0.72rem; opacity: 0.8; }
+
+/* golden duck */
+.duck-bob { position: relative; }
+.duck.gold .duck-flip svg { filter: hue-rotate(-6deg) saturate(1.7) brightness(1.1) drop-shadow(0 0 10px #ffd84a) drop-shadow(0 6px 8px rgba(120, 80, 180, 0.3)); }
+.duck.gold .duck-bob::before { content: "👑"; position: absolute; top: -16px; left: 46%; font-size: 22px; rotate: 10deg; z-index: 2; animation: bob 2.4s ease-in-out infinite; }
+
+/* reward modal */
+.reward { position: fixed; inset: 0; z-index: 9600; display: grid; place-items: center; padding: 16px; background: rgba(46, 26, 71, 0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: gameIn 0.4s var(--ease); }
+.reward[hidden] { display: none; }
+.reward-card {
+  position: relative; width: min(480px, 100%); padding: 44px 30px 26px; text-align: center; border-radius: 26px; background: var(--win-bg); color: var(--win-ink);
+  border: 3px solid #e0a800; box-shadow: 8px 8px 0 #ffd84a, 0 0 60px rgba(255, 216, 74, 0.5); animation: gamePop 0.6s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+.rw-crown { position: absolute; top: -34px; left: 50%; translate: -50% 0; font-size: 3.4rem; animation: bob 2.4s ease-in-out infinite; filter: drop-shadow(0 6px 8px rgba(120, 80, 0, 0.4)); }
+.rw-kicker { font: 500 0.74rem "DM Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--coral); }
+.reward-card h3 { font-size: 2.1rem; margin: 6px 0 12px; }
+.rw-text { color: var(--muted); font-size: 0.98rem; }
+.rw-btns { display: grid; gap: 10px; margin-top: 20px; }
+.rw-btns .btn { text-align: center; }
+.rw-close { margin-top: 14px; background: none; border: 0; color: var(--muted); font: 500 0.8rem "DM Mono", monospace; cursor: pointer; }
+.rw-close:hover { color: var(--coral); }
+html.has-cursor .reward, html.has-cursor .reward button, html.has-cursor .reward a { cursor: auto; }
+
+/* chess checker strip */
+.foot::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 14px; opacity: 0.5; background: repeating-conic-gradient(var(--lav2) 0 25%, transparent 0 50%) 0 0 / 28px 28px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent); mask-image: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal .h2 .c { opacity: 1 !important; transform: none !important; }
+  .ribbon-trail, .zone { display: none; }
+}
+.nojs-fallback .h2 .c { opacity: 1 !important; transform: none !important; }
+
+.hud-panel { max-height: calc(100vh - 170px); overflow-y: auto; scrollbar-width: thin; }
+@media (max-width: 1239px) { .hud-panel { max-height: calc(100vh - 110px); } }
